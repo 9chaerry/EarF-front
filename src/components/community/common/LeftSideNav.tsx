@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
-import UserProfile from './sideNav/MyProfile';
+import MyProfile from './sideNav/MyProfile';
 import styles from './LeftSideNav.module.scss';
 
 function LeftSideNav() {
   return (
     <div>
       <aside className={styles.container}>
-        <UserProfile />
+        <MyProfile />
 
         <nav>
           <ul>

@@ -1,7 +1,7 @@
 import styles from './BadgeModal.module.scss';
 import { ReactComponent as Exit } from 'assets/icons/Exit.svg';
 import Button from 'components/common/Button';
-import { checkedBadgeChange } from 'api/Fetcher';
+import { checkedBadgeChange } from 'api/fetcher';
 interface BadgeModalProps {
   type: string;
   name: string;

@@ -3,23 +3,26 @@ import UserProfileImage from '../common/sideNav/UserProfile';
 import PostEditButton from './PostEditButton';
 import { ReactComponent as Heart } from 'assets/icons/Heart.svg';
 import { ReactComponent as Comment } from 'assets/icons/Comment.svg';
+import { QuestionPost } from 'types/types';
 import styles from './QuestionPostingItem.module.scss';
 
-interface postItemProps {
-  content: string;
-  date: string;
-  title: string;
-  username: string;
-  likeNums: number;
-  commentNums: number;
-}
-function QuestionPostingItem({ date, title, content, username, likeNums, commentNums }: postItemProps) {
+type QuestionPostingItemProps = Omit<QuestionPost, '_id' | 'checkedBadge' | 'commentIds' | 'updatedAt' | '__v'>;
+
+function QuestionPostingItem({
+  title,
+  content,
+  createdAt,
+  name,
+  profileImage,
+  numComments,
+  likeIds,
+}: QuestionPostingItemProps) {
   const contentText = `${content.split('.').slice(0, 5).join('. ')}`;
 
   return (
     <li className={styles.container}>
       <div className={styles.userEditContainer}>
-        <span className={styles.postingDate}>{getPostingTime(date)}</span>
+        <span className={styles.postingDate}>{getPostingTime(createdAt)}</span>
         {/* <PostEditButton /> */}
       </div>
       <div className={styles.contentContainer}>
@@ -30,16 +33,16 @@ function QuestionPostingItem({ date, title, content, username, likeNums, comment
       </div>
       <div className={styles.userContainer}>
         <div>
-          <UserProfileImage username={username} />
+          <UserProfileImage username={name} profileImage={profileImage} />
         </div>
         <div className={styles.userReactionContainer}>
           <div className={styles.reactionContainer}>
             <Heart />
-            <span className={styles.reactionNumber}>{likeNums}</span>
+            <span className={styles.reactionNumber}>{likeIds.length}</span>
           </div>
           <div className={styles.reactionContainer}>
             <Comment />
-            <span className={styles.reactionNumber}>{commentNums}</span>
+            <span className={styles.reactionNumber}>{numComments}</span>
           </div>
         </div>
       </div>

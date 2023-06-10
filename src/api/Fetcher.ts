@@ -1,4 +1,4 @@
-import * as Api from './ApiRequest';
+import * as Api from './apiRequest';
 
 const domain = `http://34.64.216.86/api`;
 

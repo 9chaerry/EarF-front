@@ -1,6 +1,6 @@
 import styles from './SideNav.module.scss';
 import { NavLink } from 'react-router-dom';
-import { userLogout } from 'api/Fetcher';
+import { userLogout } from 'api/fetcher';
 
 interface NavLinkItem {
   to: string;

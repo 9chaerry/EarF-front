@@ -1,31 +1,18 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Pagination from 'react-js-pagination';
-import { getCommunityPosts } from 'api/Fetcher';
+import { getCommunityPosts } from 'api/fetcher';
 import { ReactComponent as Chat } from 'assets/icons/Search.svg';
 import { ReactComponent as Post } from 'assets/icons/Pencil.svg';
 import { ReactComponent as Circle } from 'assets/icons/Circle.svg';
 import { ReactComponent as Top } from 'assets/icons/ArrowUp.svg';
 import QuestionPostingItem from './QuestionPostingItem';
-import styles from './Board.module.scss';
 import UnsolvedQuestion from './UnsolvedQuestion';
+import { QuestionPost } from 'types/types';
+import styles from './Board.module.scss';
 
-interface postDataType {
-  id: string;
-  name: string;
-  profileImage: string;
-  checkedBadge: string;
-  title: string;
-  content: string;
-  likeIds: [];
-  commentIds: [];
-  _id: string;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-}
 function Board() {
-  const [postData, setPostData] = useState<postDataType[] | undefined>();
+  const [postData, setPostData] = useState<QuestionPost[] | undefined>();
 
   // 스크롤링
   const scrollToTop = () => {
@@ -75,10 +62,12 @@ function Board() {
   useEffect(() => {
     getQuestionPosts();
   });
-  async function getQuestionPosts() {
+
+  async function getQuestionPosts(): Promise<void> {
     try {
-      const response: any = await getCommunityPosts();
-      setPostData(response);
+      const response = await getCommunityPosts();
+      const questionPosts = response as QuestionPost[];
+      setPostData(questionPosts);
     } catch (err) {
       console.log(err);
     }
@@ -137,12 +126,14 @@ function Board() {
           postData.map((post) => (
             <QuestionPostingItem
               key={post._id}
-              likeNums={post.likeIds.length}
-              commentNums={post.commentIds.length}
               title={post.title}
               content={post.content}
-              date={post.createdAt}
-              username={post.name}
+              createdAt={post.createdAt}
+              id={post.id}
+              name={post.name}
+              profileImage={post.profileImage}
+              numComments={post.numComments}
+              likeIds={post.likeIds}
             />
           ))}
       </ul>
