@@ -21,7 +21,7 @@ function BoastSwiper() {
         effect={'coverflow'}
         coverflowEffect={{
           rotate: 10,
-          stretch: 800,
+          stretch: 700,
           depth: 150,
           modifier: 1,
           slideShadows: !1,

@@ -35,6 +35,7 @@ export interface QuestionPost {
 }
 
 export interface CreateQuestionPost {
+  _id?: string;
   title: string;
   content: string;
 }

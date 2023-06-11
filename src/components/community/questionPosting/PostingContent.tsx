@@ -1,10 +1,19 @@
-import { useRef } from 'react';
+import { useRef, ChangeEvent } from 'react';
 import styles from './PostingContent.module.scss';
-function PostingContent() {
+
+type PostingContentProps = {
+  title: string;
+  content: string;
+  onTitleChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  onContentChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
+};
+
+function PostingContent({ title, content, onTitleChange, onContentChange }: PostingContentProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const autoResizeHeight = () => {
     const textarea = textareaRef.current;
+
     if (textarea) {
       textarea.style.height = 'auto';
       textarea.style.height = textarea.scrollHeight + 'px';
@@ -13,12 +22,21 @@ function PostingContent() {
 
   return (
     <form className={styles.contentContainer}>
-      <input type='text' placeholder='제목을 입력하세요.' className={styles.title} />
+      <input
+        type='text'
+        value={title}
+        onChange={onTitleChange}
+        placeholder='제목을 입력하세요.'
+        className={styles.title}
+      />
       <textarea
         rows={1}
         placeholder='상세한 내용을 입력해주세요.'
         className={styles.content}
-        onChange={autoResizeHeight}
+        onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
+          autoResizeHeight();
+          onContentChange(event);
+        }}
         ref={textareaRef}
       />
     </form>

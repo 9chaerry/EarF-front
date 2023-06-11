@@ -12,6 +12,7 @@ import FindId from 'pages/FindId';
 import FindPassword from 'pages/FindPassword';
 import ChangePassword from 'pages/ChangePassword';
 import MyBadge from 'pages/MyBadge';
+import CommunityPost from 'pages/CommunityPost';
 
 export const protectedRoutes = [
   {
@@ -35,6 +36,10 @@ export const routes = [
   {
     path: '/community/boast',
     element: <Boast />,
+  },
+  {
+    path: '/community/question',
+    element: <CommunityPost />,
   },
   {
     path: '/mypage/edit',

@@ -29,8 +29,8 @@ export const communityApiSlice = createApi({
       query: (page = 1) => `community/questions?page=${page}&sort=mostLikes`,
     }),
     // 커뮤니티 게시글 등록 post Api
-    createCommunityPost: builder.mutation<CreateQuestionPost, Partial<CreateQuestionPost>>({
-      query: (post) => ({
+    createCommunityPost: builder.mutation({
+      query: (post: CreateQuestionPost) => ({
         url: 'community/questions',
         method: 'POST',
         headers: {
@@ -42,9 +42,9 @@ export const communityApiSlice = createApi({
       invalidatesTags: ['Post'],
     }),
     // 커뮤니티 게시글 수정 patch Api
-    editCommunityPost: builder.mutation<CreateQuestionPost, Partial<CreateQuestionPost> & { id: string }>({
-      query: ({ id, ...patch }) => ({
-        url: `community/questions/${id}`,
+    editCommunityPost: builder.mutation({
+      query: (patch: CreateQuestionPost) => ({
+        url: `community/questions/${patch._id}`,
         method: 'PATCH',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
