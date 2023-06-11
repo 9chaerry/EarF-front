@@ -16,6 +16,7 @@ import UnsolvedQuestion from './UnsolvedQuestion';
 import { PuffLoader } from 'react-spinners';
 import errorCommunity from 'assets/images/errorCommunity.png';
 import styles from './Board.module.scss';
+import UnsolvedQuestionSwiper from './UnsolvedQuestionSwiper';
 
 function Board() {
   const [page, setPage] = useState(1);
@@ -115,10 +116,7 @@ function Board() {
             <Chat />
           </button>
         </form>
-        <div className={styles.unsolved}>
-          <span>답변을 기다리고 있어요</span>
-          <UnsolvedQuestion />
-        </div>
+        <UnsolvedQuestionSwiper />
       </div>
       <div className={styles.boardTopContainer}>
         {!token ? (

@@ -1,0 +1,19 @@
+@import 'color.scss';
+
+.unsolved {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  margin: 4rem 0;
+
+  & > span {
+    font-size: 16pt;
+    font-weight: 600;
+    color: $--color--primary;
+  }
+}
+
+.unsolvedSwiper {
+  width: 70rem;
+}
