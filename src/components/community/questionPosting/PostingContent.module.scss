@@ -3,29 +3,22 @@
 .contentContainer {
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 4rem;
 
   width: 100%;
   padding: 4rem 3rem;
-  border: 1px solid $--color--border;
-  border-radius: 1rem;
-
+  border-top: 1px solid $--color--border;
+  border-bottom: 1px solid $--color--border;
   input {
     width: inherit;
     &::placeholder {
       color: $--color--text3;
     }
   }
-  hr {
-    height: 1px;
-    width: 100%;
-    background: $--color--border;
-    border: 0;
-  }
 }
 
 .title {
-  font-size: 16pt;
+  font-size: 18pt;
   font-weight: 400;
   color: $--color--text1;
 }

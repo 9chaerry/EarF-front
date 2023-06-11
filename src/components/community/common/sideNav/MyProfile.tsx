@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import MyProfileImg from './MyProfileImg';
 import styles from './MyProfile.module.scss';
 import { useGetUserInfoQuery } from 'api/communityApiSlice';
+import getBadgeImagePath from 'utils/getBadgeImagePath';
 
 function MyProfile() {
   const { data: userInfo } = useGetUserInfoQuery();
@@ -18,7 +19,7 @@ function MyProfile() {
           ) : (
             <span>{userInfo.name}</span>
           )}
-          {userInfo && <img className={styles.userBadge} />}
+          {userInfo && <img src={getBadgeImagePath(userInfo?.checkedBadge)} className={styles.userBadge} alt='Badge' />}
         </div>
         {!userInfo ? (
           <span className={`${styles.notLoggedIn} ${styles.userPostingNumber}`}>하러가기</span>

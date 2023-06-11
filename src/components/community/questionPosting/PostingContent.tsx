@@ -14,7 +14,6 @@ function PostingContent() {
   return (
     <form className={styles.contentContainer}>
       <input type='text' placeholder='제목을 입력하세요.' className={styles.title} />
-      <hr />
       <textarea
         rows={1}
         placeholder='상세한 내용을 입력해주세요.'

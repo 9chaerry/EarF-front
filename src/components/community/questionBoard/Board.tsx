@@ -1,18 +1,35 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import {
+  useGetCommunityPostsQuery,
+  useGetMostCommentsCommunityPostsQuery,
+  useGetMostLikesCommunityPostsQuery,
+} from 'api/communityApiSlice';
 import Pagination from 'react-js-pagination';
-import { getCommunityPosts } from 'api/fetcher';
 import { ReactComponent as Chat } from 'assets/icons/Search.svg';
 import { ReactComponent as Post } from 'assets/icons/Pencil.svg';
 import { ReactComponent as Circle } from 'assets/icons/Circle.svg';
 import { ReactComponent as Top } from 'assets/icons/ArrowUp.svg';
 import QuestionPostingItem from './QuestionPostingItem';
 import UnsolvedQuestion from './UnsolvedQuestion';
-import { QuestionPost } from 'types/types';
+import { PuffLoader } from 'react-spinners';
+import errorCommunity from 'assets/images/errorCommunity.png';
 import styles from './Board.module.scss';
 
 function Board() {
-  const [postData, setPostData] = useState<QuestionPost[] | undefined>();
+  const [activeSorting, setActiveSorting] = useState('recent');
+
+  const { data: postData, isLoading: isPostLoading, error: postError } = useGetCommunityPostsQuery();
+  const {
+    data: mostCommentsData,
+    isLoading: isMostCommentsLoading,
+    error: mostCommentsError,
+  } = useGetMostCommentsCommunityPostsQuery();
+  const {
+    data: mostLikesData,
+    isLoading: isMostLikesLoading,
+    error: mostLikesError,
+  } = useGetMostLikesCommunityPostsQuery();
 
   // 스크롤링
   const scrollToTop = () => {
@@ -58,19 +75,22 @@ function Board() {
     setPage(page);
   };
 
-  // 게시글 데이터
-  useEffect(() => {
-    getQuestionPosts();
-  });
+  // 정렬 기준 변경 이벤트
+  const handleSortingClick = (sorting: string) => {
+    setActiveSorting(sorting);
+  };
+  let sortedData = postData;
+  let isLoading = isPostLoading;
+  let error = postError;
 
-  async function getQuestionPosts(): Promise<void> {
-    try {
-      const response = await getCommunityPosts();
-      const questionPosts = response as QuestionPost[];
-      setPostData(questionPosts);
-    } catch (err) {
-      console.log(err);
-    }
+  if (activeSorting === 'comments') {
+    sortedData = mostCommentsData;
+    isLoading = isMostCommentsLoading;
+    error = mostCommentsError;
+  } else if (activeSorting === 'likes') {
+    sortedData = mostLikesData;
+    isLoading = isMostLikesLoading;
+    error = mostLikesError;
   }
 
   return (
@@ -106,37 +126,57 @@ function Board() {
         )}
         <div className={styles.sortingContainer}>
           <ul>
-            <li>
+            <li
+              onClick={() => handleSortingClick('recent')}
+              className={activeSorting === 'recent' ? styles.activeSorting : ''}
+            >
               <Circle />
               최신순
             </li>
-            <li>
+            <li
+              onClick={() => handleSortingClick('comments')}
+              className={activeSorting === 'comments' ? styles.activeSorting : ''}
+            >
               <Circle />
               댓글순
             </li>
-            <li>
+            <li
+              onClick={() => handleSortingClick('likes')}
+              className={activeSorting === 'likes' ? styles.activeSorting : ''}
+            >
               <Circle />
               추천순
             </li>
           </ul>
         </div>
       </div>
-      <ul>
-        {postData &&
-          postData.map((post) => (
-            <QuestionPostingItem
-              key={post._id}
-              title={post.title}
-              content={post.content}
-              createdAt={post.createdAt}
-              id={post.id}
-              name={post.name}
-              profileImage={post.profileImage}
-              numComments={post.numComments}
-              likeIds={post.likeIds}
-            />
-          ))}
-      </ul>
+      {isLoading ? (
+        <div className={styles.loadingContainer}>
+          <PuffLoader color='#24AE63' loading size={100} />
+        </div>
+      ) : error ? (
+        <div className={styles.errorContainer}>
+          <img src={errorCommunity} />
+          게시글을 불러오지 못했습니다.
+        </div>
+      ) : (
+        <ul>
+          {sortedData &&
+            sortedData?.map((post) => (
+              <QuestionPostingItem
+                key={post._id}
+                title={post.title}
+                content={post.content}
+                createdAt={post.createdAt}
+                id={post.id}
+                name={post.name}
+                profileImage={post.profileImage}
+                numComments={post.numComments}
+                likeIds={post.likeIds}
+              />
+            ))}
+        </ul>
+      )}
       <div>
         <div className={styles.pageContainer}>
           <Pagination
