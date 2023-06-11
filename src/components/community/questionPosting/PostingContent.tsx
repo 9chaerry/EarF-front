@@ -32,6 +32,7 @@ function PostingContent({ title, content, onTitleChange, onContentChange }: Post
       <textarea
         rows={1}
         placeholder='상세한 내용을 입력해주세요.'
+        value={content}
         className={styles.content}
         onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
           autoResizeHeight();

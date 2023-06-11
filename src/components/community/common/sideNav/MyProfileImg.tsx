@@ -1,4 +1,4 @@
-import { ReactComponent as ProfileImg } from 'assets/icons/profile.svg';
+import profileDefault from 'assets/images/profileDefault.png';
 import styles from './MyProfileImg.module.scss';
 import { useGetUserInfoQuery } from 'api/communityApiSlice';
 
@@ -14,7 +14,7 @@ function MyProfileImg() {
       {userInfo && userInfo.profileImage ? (
         <img src={userInfo.profileImage} className={styles.imgContainer} />
       ) : (
-        <ProfileImg className={styles.notLoggedIn} />
+        <img src={profileDefault} className={styles.notLoggedIn} />
       )}
     </>
   );

@@ -15,6 +15,16 @@ export const communityApiSlice = createApi({
         providesTags: ['User'],
       }),
     }),
+    // 커뮤니티 게시판 단일 게시글 전체 get Api
+    getAllCommunityPosts: builder.query<QuestionPost[], void>({
+      query: () => `community/questions`,
+      providesTags: ['Post'],
+    }),
+    // 커뮤니티 게시판 단일 게시글 조회 get Api
+    getCommunityPost: builder.query<QuestionPost, string>({
+      query: (postId) => `community/questions/${postId}`,
+      providesTags: ['Post'],
+    }),
     // 커뮤니티 게시판 게시글 최신순 get Api
     getCommunityPosts: builder.query<QuestionPost[], number | void>({
       query: (page = 1) => `community/questions?page=${page}&sort=latest`,
@@ -23,14 +33,25 @@ export const communityApiSlice = createApi({
     // 커뮤니티 게시판 게시글 댓글순 get Api
     getMostCommentsCommunityPosts: builder.query<QuestionPost[], number | void>({
       query: (page = 1) => `community/questions?page=${page}&sort=mostComments`,
+      providesTags: ['Post'],
     }),
     // 커뮤니티 게시판 게시글 추천순 get Api
     getMostLikesCommunityPosts: builder.query<QuestionPost[], number | void>({
       query: (page = 1) => `community/questions?page=${page}&sort=mostLikes`,
+      providesTags: ['Post'],
+    }),
+    // 커뮤니티 질문 BEST 추천 5개 조회 get Api
+    getBestLikesCommunityPosts: builder.query<QuestionPost[], void>({
+      query: () => `community/questions/most-liked`,
+    }),
+    // 커뮤니티 질문 최신 댓글 1개 조회 get Api
+    getLatestComment: builder.query<QuestionPost, void>({
+      query: () => `community/questions/latest-commented`,
+      providesTags: ['Post'],
     }),
     // 커뮤니티 게시글 등록 post Api
-    createCommunityPost: builder.mutation({
-      query: (post: CreateQuestionPost) => ({
+    createCommunityPost: builder.mutation<CreateQuestionPost, Partial<CreateQuestionPost>>({
+      query: (post) => ({
         url: 'community/questions',
         method: 'POST',
         headers: {
@@ -42,9 +63,9 @@ export const communityApiSlice = createApi({
       invalidatesTags: ['Post'],
     }),
     // 커뮤니티 게시글 수정 patch Api
-    editCommunityPost: builder.mutation({
-      query: (patch: CreateQuestionPost) => ({
-        url: `community/questions/${patch._id}`,
+    editCommunityPost: builder.mutation<CreateQuestionPost, Partial<CreateQuestionPost> & { id: string }>({
+      query: ({ id, ...patch }) => ({
+        url: `community/questions/${id}`,
         method: 'PATCH',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -70,10 +91,14 @@ export const communityApiSlice = createApi({
 
 export const {
   useGetUserInfoQuery,
+  useGetAllCommunityPostsQuery,
+  useGetCommunityPostQuery,
   useGetCommunityPostsQuery,
   useGetMostCommentsCommunityPostsQuery,
   useGetMostLikesCommunityPostsQuery,
   useCreateCommunityPostMutation,
   useEditCommunityPostMutation,
   useDeleteCommunityPostMutation,
+  useGetBestLikesCommunityPostsQuery,
+  useGetLatestCommentQuery,
 } = communityApiSlice;

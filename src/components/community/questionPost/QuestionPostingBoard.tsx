@@ -7,6 +7,7 @@ function QuestionPostingBoard() {
         <span>커뮤니티</span>
         <span>질문해요</span>
       </div>
+      <div></div>
     </div>
   );
 }

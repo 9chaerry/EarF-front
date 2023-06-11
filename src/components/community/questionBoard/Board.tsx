@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
+  useGetAllCommunityPostsQuery,
   useGetCommunityPostsQuery,
   useGetMostCommentsCommunityPostsQuery,
   useGetMostLikesCommunityPostsQuery,
@@ -17,19 +18,27 @@ import errorCommunity from 'assets/images/errorCommunity.png';
 import styles from './Board.module.scss';
 
 function Board() {
+  const [page, setPage] = useState(1);
   const [activeSorting, setActiveSorting] = useState('recent');
+  const [totalItemsCount, setTotalItemsCount] = useState(0);
 
-  const { data: postData, isLoading: isPostLoading, error: postError } = useGetCommunityPostsQuery();
+  const { data: allPostData } = useGetAllCommunityPostsQuery();
+  useEffect(() => {
+    if (allPostData) {
+      setTotalItemsCount(allPostData.length);
+    }
+  }, [allPostData]);
+  const { data: postData, isLoading: isPostLoading, error: postError } = useGetCommunityPostsQuery(page);
   const {
     data: mostCommentsData,
     isLoading: isMostCommentsLoading,
     error: mostCommentsError,
-  } = useGetMostCommentsCommunityPostsQuery();
+  } = useGetMostCommentsCommunityPostsQuery(page);
   const {
     data: mostLikesData,
     isLoading: isMostLikesLoading,
     error: mostLikesError,
-  } = useGetMostLikesCommunityPostsQuery();
+  } = useGetMostLikesCommunityPostsQuery(page);
 
   // 스크롤링
   const scrollToTop = () => {
@@ -70,7 +79,6 @@ function Board() {
   };
 
   // 페이지네이션
-  const [page, setPage] = useState(1);
   const movePage = (page: number) => {
     setPage(page);
   };
@@ -119,7 +127,7 @@ function Board() {
             작성하기
           </button>
         ) : (
-          <Link to='/community/post' className={styles.postingButton}>
+          <Link to='/community/question/post' className={styles.postingButton}>
             <Post className={styles.postingSvg} />
             작성하기
           </Link>
@@ -127,21 +135,33 @@ function Board() {
         <div className={styles.sortingContainer}>
           <ul>
             <li
-              onClick={() => handleSortingClick('recent')}
+              onClick={() => {
+                handleSortingClick('recent');
+                setPage(1);
+                scrollToTop();
+              }}
               className={activeSorting === 'recent' ? styles.activeSorting : ''}
             >
               <Circle />
               최신순
             </li>
             <li
-              onClick={() => handleSortingClick('comments')}
+              onClick={() => {
+                handleSortingClick('comments');
+                setPage(1);
+                scrollToTop();
+              }}
               className={activeSorting === 'comments' ? styles.activeSorting : ''}
             >
               <Circle />
               댓글순
             </li>
             <li
-              onClick={() => handleSortingClick('likes')}
+              onClick={() => {
+                handleSortingClick('likes');
+                setPage(1);
+                scrollToTop();
+              }}
               className={activeSorting === 'likes' ? styles.activeSorting : ''}
             >
               <Circle />
@@ -165,6 +185,7 @@ function Board() {
             sortedData?.map((post) => (
               <QuestionPostingItem
                 key={post._id}
+                _id={post._id}
                 title={post.title}
                 content={post.content}
                 createdAt={post.createdAt}
@@ -172,7 +193,7 @@ function Board() {
                 name={post.name}
                 profileImage={post.profileImage}
                 numComments={post.numComments}
-                likeIds={post.likeIds}
+                numLikes={post.numLikes}
               />
             ))}
         </ul>
@@ -182,11 +203,11 @@ function Board() {
           <Pagination
             activePage={page}
             itemsCountPerPage={10}
-            totalItemsCount={50}
+            totalItemsCount={totalItemsCount}
             pageRangeDisplayed={5}
             prevPageText='‹'
             nextPageText='›'
-            onChange={movePage}
+            onChange={(selectedPage) => movePage(selectedPage)}
           />
         </div>
       </div>

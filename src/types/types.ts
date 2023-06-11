@@ -25,13 +25,13 @@ export interface QuestionPost {
   checkedBadge: string;
   title: string;
   content: string;
-  likeIds: string[];
-  commentIds: string[];
+  likeIds?: string[];
+  commentIds?: string[];
   createdAt: string;
   updatedAt: string;
   __v: number;
   numComments: number;
-  numLikes?: number;
+  numLikes: number;
 }
 
 export interface CreateQuestionPost {
