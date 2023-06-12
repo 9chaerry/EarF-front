@@ -1,6 +1,7 @@
 @import 'color.scss';
 
 .unsolved {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 1rem;

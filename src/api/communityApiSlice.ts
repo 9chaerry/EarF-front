@@ -1,5 +1,14 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { User, QuestionPost, CreateQuestionPost } from 'types/types';
+import {
+  User,
+  QuestionPost,
+  DeletePost,
+  CreateQuestionPost,
+  Comment,
+  CommentPath,
+  CommentPost,
+  LastComment,
+} from 'types/types';
 
 export const communityApiSlice = createApi({
   reducerPath: 'communityApi',
@@ -17,7 +26,7 @@ export const communityApiSlice = createApi({
     }),
     // 커뮤니티 게시판 단일 게시글 전체 get Api
     getAllCommunityPosts: builder.query<QuestionPost[], void>({
-      query: () => `community/questions`,
+      query: () => `community/questions-all`,
       providesTags: ['Post'],
     }),
     // 커뮤니티 게시판 단일 게시글 조회 get Api
@@ -45,12 +54,17 @@ export const communityApiSlice = createApi({
       query: () => `community/questions/most-liked`,
     }),
     // 커뮤니티 질문 최신 댓글 1개 조회 get Api
-    getLatestComment: builder.query<QuestionPost, void>({
+    getLatestComment: builder.query<LastComment, void>({
       query: () => `community/questions/latest-commented`,
       providesTags: ['Post'],
     }),
+    // 커뮤니티 질문 댓글 0 게시글 조회 get Api
+    getNoComment: builder.query<QuestionPost[], void>({
+      query: () => `community/questions/no-comments`,
+      providesTags: ['Post'],
+    }),
     // 커뮤니티 게시글 등록 post Api
-    createCommunityPost: builder.mutation<CreateQuestionPost, Partial<CreateQuestionPost>>({
+    createCommunityPost: builder.mutation<Comment, Partial<CreateQuestionPost>>({
       query: (post) => ({
         url: 'community/questions',
         method: 'POST',
@@ -63,7 +77,7 @@ export const communityApiSlice = createApi({
       invalidatesTags: ['Post'],
     }),
     // 커뮤니티 게시글 수정 patch Api
-    editCommunityPost: builder.mutation<CreateQuestionPost, Partial<CreateQuestionPost> & { id: string }>({
+    editCommunityPost: builder.mutation<CreateQuestionPost, Partial<QuestionPost> & { id: string }>({
       query: ({ id, ...patch }) => ({
         url: `community/questions/${id}`,
         method: 'PATCH',
@@ -76,7 +90,54 @@ export const communityApiSlice = createApi({
       invalidatesTags: ['Post'],
     }),
     // 커뮤니티 게시글 삭제 delete Api
-    deleteCommunityPost: builder.mutation<CreateQuestionPost, Partial<CreateQuestionPost> & { id: string }>({
+    deleteCommunityPost: builder.mutation<CreateQuestionPost, Partial<DeletePost> & { id: string }>({
+      query: ({ id }) => ({
+        url: `community/questions/${id}`,
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      }),
+      invalidatesTags: ['Post'],
+    }),
+    // 커뮤니티 댓글 전체 조회 get Api
+    getAllComments: builder.query<Comment[], string>({
+      query: (postId) => `community/questions/comments/${postId}`,
+      providesTags: ['Post'],
+    }),
+    // 커뮤니티 댓글 단일 조회 get Api
+    getComment: builder.query<Comment, CommentPath>({
+      query: ({ postId, commentId }) => `community/questions/comments/${postId}/${commentId}`,
+      providesTags: ['Post'],
+    }),
+    // 커뮤니티 댓글 생성 post Api
+    createComment: builder.mutation<CreateQuestionPost, CommentPost & { id: string }>({
+      query: ({ id, ...post }) => ({
+        url: `community/questions/comments/${id}`,
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+        },
+        body: post,
+      }),
+      invalidatesTags: ['Post'],
+    }),
+    // 커뮤니티 댓글 수정 patch Api
+    editComment: builder.mutation<CreateQuestionPost, Partial<CreateQuestionPost> & { id: string }>({
+      query: ({ id, ...patch }) => ({
+        url: `community/questions/${id}`,
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+        },
+        body: patch,
+      }),
+      invalidatesTags: ['Post'],
+    }),
+    // 커뮤니티 댓글 삭제 delete Api
+    deleteComment: builder.mutation<CreateQuestionPost, Partial<CreateQuestionPost> & { id: string }>({
       query: ({ id }) => ({
         url: `community/questions/${id}`,
         method: 'DELETE',
@@ -101,4 +162,10 @@ export const {
   useDeleteCommunityPostMutation,
   useGetBestLikesCommunityPostsQuery,
   useGetLatestCommentQuery,
+  useGetNoCommentQuery,
+  useGetAllCommentsQuery,
+  useGetCommentQuery,
+  useCreateCommentMutation,
+  useEditCommentMutation,
+  useDeleteCommentMutation,
 } = communityApiSlice;

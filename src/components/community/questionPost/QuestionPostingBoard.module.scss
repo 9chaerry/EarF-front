@@ -26,3 +26,87 @@
   justify-content: flex-end;
   gap: 2rem;
 }
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+
+  width: 100%;
+  padding: 4rem 1rem 0 1rem;
+
+  border-top: 1px solid $--color--border;
+}
+
+.postUserContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+
+  .userContainer {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .userName {
+    font-size: 12pt;
+    font-weight: 500;
+    line-height: 1.2;
+    color: $--color--text1;
+  }
+
+  .postingDate {
+    font-size: 9pt;
+    font-weight: 300;
+    color: $--color--text3;
+
+    & > :first-child {
+      margin-right: 0.5rem;
+    }
+  }
+}
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+
+  .title {
+    font-size: 18pt;
+    font-weight: 400;
+    color: $--color--text1;
+  }
+  .content {
+    min-height: 10rem;
+    width: 100%;
+    border: none;
+
+    font-size: 12pt;
+    font-weight: 300;
+    color: $--color--text2;
+  }
+}
+
+.reactionContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.scrollContainer {
+  position: fixed;
+  right: 5%;
+  bottom: 5%;
+  z-index: 1;
+  cursor: pointer;
+
+  button {
+    border-radius: 50%;
+    border: 2px solid $--color--primary;
+    padding: 1rem;
+
+    &:hover {
+      color: rgba($color: transparent, $alpha: 0.5);
+      border-color: rgba($color: transparent, $alpha: 0.5);
+      transition: all 0.4s ease-out;
+    }
+  }
+}

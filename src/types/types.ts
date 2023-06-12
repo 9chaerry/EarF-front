@@ -25,12 +25,46 @@ export interface QuestionPost {
   checkedBadge: string;
   title: string;
   content: string;
-  likeIds?: string[];
-  commentIds?: string[];
+  likeIds: string[];
+  commentIds: string[];
   createdAt: string;
   updatedAt: string;
   __v: number;
   numComments: number;
+  numLikes: number;
+}
+
+export interface DeletePost {
+  message: string;
+  question: QuestionPost;
+}
+
+export interface CommentPath {
+  postId: string;
+  commentId: string;
+}
+
+export interface CommentPost {
+  comment: string;
+}
+
+export interface LastComment {
+  title: string;
+  comment: string;
+}
+
+export interface Comment {
+  _id: string;
+  postId: string;
+  id: string;
+  name: string;
+  profileImage: string;
+  checkedBadge: string;
+  comment: string;
+  likeIds: string[];
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
   numLikes: number;
 }
 

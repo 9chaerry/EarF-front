@@ -1,12 +1,12 @@
 import HeartReaction from '../common/HeartReaction';
 import styles from './CommentItem.module.scss';
-import UserProfileImage from '../common/sideNav/UserProfile';
+import CommentUserProfile from './CommentUserProfile';
 
 function CommentItem() {
   return (
     <li className={styles.commentItemContainer}>
       <div className={styles.commentUserContainer}>
-        <UserProfileImage />
+        <CommentUserProfile />
         <div>
           <p className={styles.userName}>EarF</p>
           <p className={styles.postingDate}>

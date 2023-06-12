@@ -10,7 +10,6 @@ function UserProfile(props: { profileImage?: string; username?: string }) {
         ) : (
           <ProfileImg className={styles.userProfile} />
         )}
-        {/* <div className={styles.userBadge}></div> */}
       </div>
       <span className={styles.userName}>{props.username}</span>
     </div>

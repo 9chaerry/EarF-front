@@ -28,6 +28,7 @@ function PostingContent({ title, content, onTitleChange, onContentChange }: Post
         onChange={onTitleChange}
         placeholder='제목을 입력하세요.'
         className={styles.title}
+        spellCheck='false'
       />
       <textarea
         rows={1}
@@ -38,6 +39,7 @@ function PostingContent({ title, content, onTitleChange, onContentChange }: Post
           autoResizeHeight();
           onContentChange(event);
         }}
+        spellCheck='false'
         ref={textareaRef}
       />
     </form>

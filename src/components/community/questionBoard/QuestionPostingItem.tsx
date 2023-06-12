@@ -7,7 +7,7 @@ import { ReactComponent as Comment } from 'assets/icons/Comment.svg';
 import { QuestionPost } from 'types/types';
 import styles from './QuestionPostingItem.module.scss';
 
-type QuestionPostingItemProps = Omit<QuestionPost, 'checkedBadge' | 'commentIds' | 'updatedAt' | '__v'>;
+type QuestionPostingItemProps = Omit<QuestionPost, 'checkedBadge' | 'likeIds' | 'commentIds' | 'updatedAt' | '__v'>;
 
 function QuestionPostingItem({
   _id,
@@ -27,7 +27,7 @@ function QuestionPostingItem({
     <li className={styles.container}>
       <div className={styles.userEditContainer}>
         <span className={styles.postingDate}>{getPostingTime(createdAt)}</span>
-        {userInfo && userInfo.id === id ? <PostEditButton postId={_id} /> : ''}
+        {userInfo && userInfo.id === id ? <PostEditButton _id={_id} /> : ''}
       </div>
       <div className={styles.contentContainer}>
         <div>

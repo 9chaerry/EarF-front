@@ -1,5 +1,4 @@
 import { useGetBestLikesCommunityPostsQuery, useGetLatestCommentQuery } from 'api/communityApiSlice';
-import { Link } from 'react-router-dom';
 import styles from './RightSideNav.module.scss';
 import BestPost from './sideNav/BestPost';
 import NewComment from './sideNav/NewComment';
@@ -26,7 +25,7 @@ function RightSideNav() {
         </ul>
         <div className={styles.newPostContainer}>
           <span className={styles.subTitle}>최신 댓글</span>
-          {lastCommentData && <NewComment title={lastCommentData.title} comment={lastCommentData.content} />}
+          {lastCommentData && <NewComment title={lastCommentData.title} comment={lastCommentData.comment} />}
         </div>
       </aside>
     </div>

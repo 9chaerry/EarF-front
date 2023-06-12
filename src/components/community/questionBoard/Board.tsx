@@ -12,7 +12,6 @@ import { ReactComponent as Post } from 'assets/icons/Pencil.svg';
 import { ReactComponent as Circle } from 'assets/icons/Circle.svg';
 import { ReactComponent as Top } from 'assets/icons/ArrowUp.svg';
 import QuestionPostingItem from './QuestionPostingItem';
-import UnsolvedQuestion from './UnsolvedQuestion';
 import { PuffLoader } from 'react-spinners';
 import errorCommunity from 'assets/images/errorCommunity.png';
 import styles from './Board.module.scss';

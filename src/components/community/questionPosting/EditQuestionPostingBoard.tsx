@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Button from 'components/common/Button';
 import styles from './EditQuestionPostingBoard.module.scss';
 import { useGetCommunityPostQuery, useEditCommunityPostMutation } from 'api/communityApiSlice';
@@ -44,7 +44,7 @@ function EditQuestionPostingBoard() {
     try {
       const { data }: any = await editCommunityPostMutation({ id: postId, title, content });
       console.log('게시글 수정 성공:', data);
-      navigate('/community');
+      navigate(-1);
     } catch (error) {
       console.log('게시글 수정 실패:', error);
     }
@@ -63,6 +63,7 @@ function EditQuestionPostingBoard() {
           onChange={handleTitleChange}
           placeholder='제목을 입력하세요.'
           className={styles.title}
+          spellCheck='false'
         />
         <textarea
           rows={1}
@@ -73,13 +74,18 @@ function EditQuestionPostingBoard() {
             autoResizeHeight();
             handleContentChange(event);
           }}
+          spellCheck='false'
           ref={textareaRef}
         />
       </form>
       <div className={styles.buttonContainer}>
-        <Link to='/community'>
-          <Button text='취소' className='whiteButton' />
-        </Link>
+        <Button
+          text='취소'
+          className='whiteButton'
+          onClick={() => {
+            navigate(-1);
+          }}
+        />
         <Button text='수정' onClick={handleEditPost} />
       </div>
     </div>

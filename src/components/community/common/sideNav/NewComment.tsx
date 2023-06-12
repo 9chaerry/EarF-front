@@ -5,10 +5,10 @@ export default function NewComment(props: { title: string; comment: string }) {
   const commentText = `${props.comment.split('.').slice(0, 2).join('. ')}.`;
   let titleText;
 
-  if (props.title.length <= 8) {
+  if (props.title.length <= 10) {
     titleText = props.title;
   } else {
-    titleText = props.title.split('').slice(0, 8).join('') + '...';
+    titleText = props.title.split('').slice(0, 10).join('') + '...';
   }
 
   return (

@@ -33,53 +33,63 @@
 
 .userCommentContainer {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 
   width: 95%;
-  padding: 2rem 0;
 
-  .userProfileContainer {
-    position: relative;
-    display: inline-block;
+  > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    .userProfileContainer {
+      position: relative;
+      display: inline-block;
 
-    .userProfile {
-      width: 6rem;
-      height: 6rem;
+      .userProfile {
+        width: 5rem;
+        height: 5rem;
 
-      background: pink;
-      border-radius: 50%;
+        background: pink;
+        border-radius: 50%;
+      }
+
+      .userBadge {
+        position: absolute;
+        top: -0.7rem;
+        right: -0.7rem;
+        width: 2.4rem;
+        height: 2.4rem;
+
+        background: skyblue;
+        border-radius: 50%;
+      }
     }
 
-    .userBadge {
-      position: absolute;
-      top: -0.6rem;
-      right: -0.6rem;
-      width: 2.5rem;
-      height: 2.5rem;
+    & .content {
+      width: 90%;
+      min-height: 6rem;
 
-      background: skyblue;
-      border-radius: 50%;
+      padding: 1rem;
+
+      border: none;
+      border-radius: 0.5rem;
+
+      font-size: 12pt;
+      font-weight: 400;
+      color: $--color--text1;
+
+      resize: none;
+
+      &:focus {
+        outline: none;
+      }
     }
   }
 
-  & .content {
-    width: 78%;
-    min-height: 6rem;
-
-    padding: 1rem;
-
-    border: none;
-    border-radius: 0.5rem;
-
-    font-size: 12pt;
-    font-weight: 400;
-    color: $--color--text1;
-
-    resize: none;
-
-    &:focus {
-      outline: none;
-    }
+  > button {
+    align-self: flex-end;
   }
 }
