@@ -1,6 +1,7 @@
 import getPostingTime from 'utils/getPostingTime';
 import styles from './UnsolvedQuestion.module.scss';
 import UserProfile from '../common/sideNav/UserProfile';
+import { Link } from 'react-router-dom';
 
 interface UnsolvedQuestionProps {
   _id: string;
@@ -12,10 +13,12 @@ interface UnsolvedQuestionProps {
 
 function UnsolvedQuestion({ _id, title, createdAt, name, profileImage }: UnsolvedQuestionProps) {
   return (
-    <li className={styles.questionContainer} id={_id}>
-      <UserProfile profileImage={profileImage} username={name} />
-      <p>{title}</p>
-      <p>{getPostingTime(createdAt)}</p>
+    <li id={_id}>
+      <Link to={`/community/question/${_id}`} className={styles.questionContainer}>
+        <UserProfile profileImage={profileImage} username={name} />
+        <p>{title}</p>
+        <p>{getPostingTime(createdAt)}</p>
+      </Link>
     </li>
   );
 }

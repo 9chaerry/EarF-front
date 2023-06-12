@@ -1,5 +1,6 @@
 import { useGetNoCommentQuery } from 'api/communityApiSlice';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay } from 'swiper';
 import 'swiper/scss';
 import 'swiper/scss/navigation';
 import UnsolvedQuestion from './UnsolvedQuestion';
@@ -14,7 +15,7 @@ function UnsolvedQuestionSwiper() {
     slidesPerView: 2,
     className: styles.unsolvedSwiper,
     autoplay: {
-      delay: 1000,
+      delay: 3000,
     },
     loop: true,
     loopAdditionalSlides: 1,
@@ -23,7 +24,16 @@ function UnsolvedQuestionSwiper() {
   return (
     <div className={styles.unsolved}>
       <span>답변을 기다리고 있어요</span>
-      <Swiper {...swiperParams}>
+      <Swiper
+        speed={600}
+        spaceBetween={5}
+        autoHeight={true}
+        slidesPerView={2}
+        className={styles.unsolvedSwiper}
+        autoplay={{ delay: 5000, disableOnInteraction: true }}
+        loop={true}
+        modules={[Autoplay]}
+      >
         {noCommentData &&
           noCommentData?.map((post) => (
             <SwiperSlide key={post._id}>
