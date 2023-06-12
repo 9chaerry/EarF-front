@@ -5,13 +5,17 @@
   padding: 2rem;
   border-radius: 0.5rem;
   background: white;
-
   hr {
     height: 1px;
     margin: 1rem 0;
     background: $--color--border;
     border: 0;
   }
+}
+.commentEditContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .reactionContainer {
@@ -42,4 +46,29 @@
       margin-right: 0.5rem;
     }
   }
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.content {
+  min-height: 5rem;
+  width: 100%;
+  border: 1px solid $--color--border;
+
+  font-size: 12pt;
+  font-weight: 300;
+  color: $--color--text2;
+
+  resize: none;
+
+  &:focus {
+    outline: none;
+  }
+}
+.comment {
+  color: $--color--text1;
 }

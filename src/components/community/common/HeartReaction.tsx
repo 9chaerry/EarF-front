@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ReactComponent as Heart } from 'assets/icons/Heart.svg';
 import styles from './HeartReaction.module.scss';
 
-function HeartReaction() {
+function HeartReaction(props: { numLikes?: number }) {
   const token = localStorage.getItem('token');
   const [likeIt, setLikeIt] = useState(false);
   const [likeItNumber, setLikeItNumber] = useState(0);
+
+  useEffect(() => {
+    props.numLikes && setLikeItNumber(props.numLikes);
+  });
 
   const handleLikeIt = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();

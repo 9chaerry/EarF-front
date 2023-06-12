@@ -1,7 +1,7 @@
 import { useGetUserInfoQuery, useGetCommunityPostQuery } from 'api/communityApiSlice';
 import CommentUserProfile from '../comment/CommentUserProfile';
 import UserComments from '../comment/UserComments';
-import PostEditButton from '../questionBoard/PostEditButton';
+import PostEditButton from '../common/PostEditButton';
 import styles from './QuestionPostingBoard.module.scss';
 import getPostingDate from 'utils/getPostingDate';
 import HeartReaction from '../common/HeartReaction';
@@ -52,7 +52,7 @@ function QuestionPostingBoard() {
           </div>
         </div>
       )}
-      {postInfo && <UserComments postId={postInfo._id} />}
+      {postInfo && <UserComments />}
       <div className={styles.scrollContainer}>
         <button onClick={scrollToTop} type='button'>
           <Top />

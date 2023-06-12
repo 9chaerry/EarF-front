@@ -1,11 +1,52 @@
-import { useRef } from 'react';
+import { useGetUserInfoQuery, useGetAllCommentsQuery, useCreateCommentMutation } from 'api/communityApiSlice';
+import { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CommentItem from './CommentItem';
 import Button from 'components/common/Button';
 import styles from './UserComments.module.scss';
+import errorCommunity from 'assets/images/errorCommunity.png';
+import profileDefault from 'assets/images/profileDefault.png';
+import getBadgeImagePath from 'utils/getBadgeImagePath';
 
-function UserComments(props: { postId?: string }) {
+function UserComments() {
+  const [showAllComments, setShowAllComments] = useState(false);
+  const [comment, setComment] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const token = localStorage.getItem('token');
+  const navigate = useNavigate();
+
+  const url = new URL(window.location.href);
+  const postId = url.pathname.split('/')[3];
+
+  const { data: commentInfo } = useGetAllCommentsQuery(postId);
+  const { data: userInfo } = useGetUserInfoQuery();
+  const [createCommentMutation] = useCreateCommentMutation();
+
+  const handleToggleComments = () => {
+    setShowAllComments((prevState) => !prevState);
+  };
+
+  const handleUserCommentChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setComment(event.target.value);
+  };
+
+  const handleCreateComment = async () => {
+    if (!token) {
+      const confirmResult = window.confirm(
+        '댓글을 작성하시려면 로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?'
+      );
+      if (confirmResult) {
+        navigate('/login');
+      }
+    } else {
+      try {
+        const { data }: any = await createCommentMutation({ id: postId, comment });
+        console.log('댓글 생성 성공:', data);
+      } catch (error) {
+        console.log('댓글 생성 실패:', error);
+      }
+    }
+  };
 
   const autoResizeHeight = () => {
     const textarea = textareaRef.current;
@@ -17,16 +58,52 @@ function UserComments(props: { postId?: string }) {
 
   return (
     <div className={styles.container}>
-      <div className={styles.allCommentsButton}>전체댓글보기</div>
-      <ul>
-        <CommentItem />
-        <CommentItem />
-      </ul>
+      {commentInfo && commentInfo.length === 0 ? (
+        <div className={styles.errorContainer}>
+          <img src={errorCommunity} />
+          댓글이 없습니다! 새로운 댓글을 작성해보세요.
+        </div>
+      ) : (
+        <>
+          {commentInfo && commentInfo.length > 2 ? (
+            <div className={styles.allCommentsButton} onClick={handleToggleComments} style={{ cursor: 'pointer' }}>
+              {showAllComments ? '전체댓글숨기기' : '전체댓글보기'}
+            </div>
+          ) : (
+            <div className={styles.allCommentsButton} style={{ borderBottom: 0 }}></div>
+          )}
+          <ul>
+            {commentInfo &&
+              commentInfo
+                .slice(showAllComments ? -commentInfo.length : -2)
+                .map((comments) => (
+                  <CommentItem
+                    key={comments._id}
+                    _id={comments._id}
+                    id={comments.id}
+                    postId={comments.postId}
+                    name={comments.name}
+                    profileImage={comments.profileImage}
+                    checkedBadge={comments.checkedBadge}
+                    comment={comments.comment}
+                    createdAt={comments.createdAt}
+                    numLikes={comments.numLikes}
+                  />
+                ))}
+          </ul>
+        </>
+      )}
       <div className={styles.userCommentContainer}>
         <div>
           <div className={styles.userProfileContainer}>
-            <div className={styles.userProfile}></div>
-            <div className={styles.userBadge}></div>
+            {userInfo && userInfo.profileImage ? (
+              <img src={userInfo.profileImage} className={styles.userProfile} />
+            ) : (
+              <img src={profileDefault} className={styles.userProfile} />
+            )}
+            {userInfo && (
+              <img src={getBadgeImagePath(userInfo?.checkedBadge)} className={styles.userBadge} alt='Badge' />
+            )}
           </div>
           {!token ? (
             <textarea rows={1} placeholder='로그인 후 댓글 작성이 가능합니다.' className={styles.content} disabled />
@@ -35,12 +112,20 @@ function UserComments(props: { postId?: string }) {
               rows={1}
               placeholder='댓글을 입력해주세요.'
               className={styles.content}
-              onChange={autoResizeHeight}
+              value={comment}
+              onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
+                autoResizeHeight();
+                handleUserCommentChange(event);
+              }}
               ref={textareaRef}
             />
           )}
         </div>
-        {!token ? <Button text='등록' disabled={true} /> : <Button text='등록' />}
+        {!token && comment ? (
+          <Button text='등록' disabled={true} onClick={handleCreateComment} />
+        ) : (
+          <Button text='등록' onClick={handleCreateComment} />
+        )}
       </div>
     </div>
   );

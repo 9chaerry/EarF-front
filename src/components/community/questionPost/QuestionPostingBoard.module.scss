@@ -81,7 +81,7 @@
     border: none;
 
     font-size: 12pt;
-    font-weight: 300;
+    font-weight: 400;
     color: $--color--text2;
   }
 }
@@ -89,6 +89,8 @@
 .reactionContainer {
   display: flex;
   justify-content: space-between;
+  font-weight: 500;
+  color: $--color--text1;
 }
 
 .scrollContainer {

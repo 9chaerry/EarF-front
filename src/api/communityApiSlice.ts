@@ -111,7 +111,7 @@ export const communityApiSlice = createApi({
       providesTags: ['Post'],
     }),
     // 커뮤니티 댓글 생성 post Api
-    createComment: builder.mutation<CreateQuestionPost, CommentPost & { id: string }>({
+    createComment: builder.mutation<Comment, CommentPost & { id: string }>({
       query: ({ id, ...post }) => ({
         url: `community/questions/comments/${id}`,
         method: 'POST',
@@ -124,9 +124,9 @@ export const communityApiSlice = createApi({
       invalidatesTags: ['Post'],
     }),
     // 커뮤니티 댓글 수정 patch Api
-    editComment: builder.mutation<CreateQuestionPost, Partial<CreateQuestionPost> & { id: string }>({
-      query: ({ id, ...patch }) => ({
-        url: `community/questions/${id}`,
+    editComment: builder.mutation<CommentPost, CommentPost & CommentPath>({
+      query: ({ postId, commentId, ...patch }) => ({
+        url: `community/questions/comments/${postId}/${commentId}`,
         method: 'PATCH',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -137,9 +137,9 @@ export const communityApiSlice = createApi({
       invalidatesTags: ['Post'],
     }),
     // 커뮤니티 댓글 삭제 delete Api
-    deleteComment: builder.mutation<CreateQuestionPost, Partial<CreateQuestionPost> & { id: string }>({
-      query: ({ id }) => ({
-        url: `community/questions/${id}`,
+    deleteComment: builder.mutation<CommentPost, CommentPath>({
+      query: ({ postId, commentId }) => ({
+        url: `community/questions/comments/${postId}/${commentId}`,
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
