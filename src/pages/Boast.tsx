@@ -3,6 +3,7 @@ import RightSideNav from 'components/community/common/RightSideNav';
 import LeftSideNav from 'components/community/common/LeftSideNav';
 import Board from 'components/community/boastBoard/Board';
 import styles from './Community.module.scss';
+import ScrollToTopOnPageLoad from 'components/common/ScrollTopOnPageLoad';
 
 function Boast() {
   return (
@@ -12,6 +13,7 @@ function Boast() {
         <LeftSideNav />
         <Board />
         <RightSideNav />
+        <ScrollToTopOnPageLoad />
       </section>
     </div>
   );

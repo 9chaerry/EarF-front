@@ -5,6 +5,7 @@ import { useGetUserInfoQuery } from 'api/communityApiSlice';
 import { ReactComponent as Heart } from 'assets/icons/Heart.svg';
 import { ReactComponent as Comment } from 'assets/icons/Comment.svg';
 import { QuestionPost } from 'types/types';
+import { Link } from 'react-router-dom';
 import styles from './QuestionPostingItem.module.scss';
 
 type QuestionPostingItemProps = Omit<QuestionPost, 'checkedBadge' | 'likeIds' | 'commentIds' | 'updatedAt' | '__v'>;
@@ -29,12 +30,14 @@ function QuestionPostingItem({
         <span className={styles.postingDate}>{getPostingTime(createdAt)}</span>
         {userInfo && userInfo.id === id ? <PostEditButton _id={_id} /> : ''}
       </div>
-      <div className={styles.contentContainer}>
-        <div>
-          <p className={styles.title}>{title}</p>
-          <p className={styles.content}>{contentText}</p>
+      <Link to={`/community/question/${_id}`}>
+        <div className={styles.contentContainer}>
+          <div>
+            <p className={styles.title}>{title}</p>
+            <p className={styles.content}>{contentText}</p>
+          </div>
         </div>
-      </div>
+      </Link>
       <div className={styles.userContainer}>
         <div>
           <UserProfileImage username={name} profileImage={profileImage} />

@@ -24,7 +24,7 @@ function QuestionPostingBoard() {
     try {
       const { data }: any = await createCommunityPostMutation({ title, content });
       console.log('게시글 등록 성공:', data);
-      navigate('/community');
+      navigate(`/community/question/${data._id}`);
     } catch (error) {
       console.log('게시글 등록 실패:', error);
     }
