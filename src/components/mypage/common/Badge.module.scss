@@ -25,13 +25,21 @@
 
   width: 150px;
   height: 200px;
+
+  padding: 20px 0;
+
   border: solid $--color--primary 1px;
   border-radius: 10px;
   box-sizing: border-box;
+
   cursor: pointer;
 
   &:hover {
     box-shadow: $--color--primary 0px 2px 8px 0px;
+  }
+
+  & > .badgeName {
+    font-size: 1.8rem;
   }
 
   & > img {

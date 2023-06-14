@@ -1,0 +1,40 @@
+@import 'color.scss';
+
+.logo {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  span {
+    display: block;
+    padding: 0 0 10px;
+    font-size: 2rem;
+    font-family: 'Montserrat Alternates';
+    font-style: italic;
+    font-weight: 900;
+    color: #24ae63;
+  }
+}
+
+.title {
+  padding: 0 0 30px;
+
+  h2 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: $--color--text1;
+  }
+
+  p {
+    display: block;
+    padding: 8px 0 0;
+    font-size: 1.4rem;
+    color: $--color--text2;
+    opacity: 0.8;
+  }
+
+  a {
+    color: rgb(57, 122, 246);
+    text-decoration: underline;
+  }
+}

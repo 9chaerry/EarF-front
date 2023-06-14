@@ -3,11 +3,26 @@ import { useEffect, useState } from 'react';
 import Button from 'components/common/Button';
 import Modal from './Modal';
 import { userInfo } from 'api/fetcher';
+import defaultProfile from 'assets/icons/UserIcon.svg';
+
+interface UserData {
+  id: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  profileImage: string | null;
+}
 
 function Main() {
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [showRemoveModal, setShowRemoveModal] = useState<boolean>(false);
-  const [user, setUser] = useState({});
+  const [userData, setUserData] = useState<UserData>({
+    id: '',
+    name: '',
+    email: '',
+    phoneNumber: '',
+    profileImage: null,
+  });
 
   // Edit 모달
   const handleShowEditModal = (): void => {
@@ -30,38 +45,47 @@ function Main() {
   };
 
   // 유저 정보 불러오기
-  // useEffect(() => {
-  //   const fetchUserInfo = async () => {
-  //     try {
-  //       const userData = await userInfo();
-  //       setUser(userData);
-  //     } catch (error) {
-  //       console.error('Error fetching user info:', error);
-  //     }
-  //   };
-  //   fetchUserInfo();
-  // }, []);
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const { name, email, id, phoneNumber, profileImage }: UserData = (await userInfo()) as UserData;
+        const userData = {
+          name,
+          email,
+          id,
+          phoneNumber,
+          profileImage,
+        };
+        setUserData(userData);
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+      }
+    };
+    fetchUserInfo();
+  }, []);
 
   return (
     <div className={styles.main}>
       {showEditModal && <Modal handleShowModal={handleShowEditModal} handleNavigateToEdit={handleNavigateToEdit} />}
       {showRemoveModal && <Modal handleShowModal={handleShowRemoveModal} handleNavigateToEdit={handleRemoveAccount} />}
       <div className={styles.profile}>
-        <div className={styles.imgContainer}></div>
-        {/* <div className={styles.userId}>{userData.id}</div> */}
+        <div className={styles.imgContainer}>
+          <img src={userData.profileImage ? userData.profileImage : `${defaultProfile}`} alt='프로필' />
+        </div>
+        <div className={styles.userId}>{userData.id}</div>
       </div>
       <div className={styles.dataFiledSet}>
         <div className={styles.dataFiled}>
           <div className={styles.fixedData}>이름</div>
-          {/* <div className={styles.fetchData}>{userData.name}</div> */}
+          <div className={styles.fetchData}>{userData.name}</div>
         </div>
         <div className={styles.dataFiled}>
           <div className={styles.fixedData}>이메일</div>
-          {/* <div className={styles.fetchData}>{userData.email}</div> */}
+          <div className={styles.fetchData}>{userData.email}</div>
         </div>
         <div className={styles.dataFiled}>
           <div className={styles.fixedData}>전화번호</div>
-          {/* <div className={styles.fetchData}>{userData.phoneNumber}</div> */}
+          <div className={styles.fetchData}>{userData.phoneNumber}</div>
         </div>
       </div>
       <div className={styles.buttonContainer}>

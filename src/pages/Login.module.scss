@@ -49,49 +49,6 @@
     }
   }
 
-  .logo {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-
-    // .img {
-    //   display: block;
-    //   margin-right: 10px;
-    //   width: 20px;
-    //   height: 20px;
-    //   background: gainsboro;
-    //   border-radius: 5px;
-    // }
-
-    span {
-      display: block;
-      padding: 0 0 10px;
-      font-size: 2rem;
-      font-family: 'Montserrat Alternates';
-      font-style: italic;
-      font-weight: 900;
-      color: #24ae63;
-    }
-  }
-
-  .title {
-    padding: 0 0 30px;
-
-    h2 {
-      font-size: 3rem;
-      font-weight: 700;
-      color: $--color--text1;
-    }
-
-    p {
-      display: block;
-      padding: 8px 0 0;
-      font-size: 1.4rem;
-      color: $--color--text2;
-      opacity: 0.8;
-    }
-  }
-
   .linkBox {
     display: flex;
     justify-content: center;
@@ -115,51 +72,6 @@
         height: 10px;
         background: $--color--border;
       }
-    }
-  }
-}
-
-.buttonBox {
-  display: flex;
-  justify-content: center;
-  padding: 20px 0 0;
-
-  button {
-    display: block;
-    flex: 1 1;
-    padding: 0 16px;
-    height: 48px;
-    background: #24ae63;
-    border: 1px solid #24ae63;
-    border-radius: 6px;
-    font-size: 1.6rem;
-    font-weight: 500;
-    color: $--color--white;
-    transition: background 0.3s ease-in-out;
-
-    &:hover {
-      background: #14703e;
-    }
-  }
-
-  a {
-    display: block;
-    flex: 1 1;
-    padding: 0 16px;
-    height: 48px;
-    background: $--color--white;
-    border: 1px solid #24ae63;
-    border-radius: 6px;
-    font-size: 1.6rem;
-    font-weight: 500;
-    line-height: 4.8rem;
-    color: #24ae63;
-    text-align: center;
-    transition: background 0.3s ease-in-out;
-
-    &:hover {
-      background: #24ae63;
-      color: $--color--white;
     }
   }
 }
@@ -198,8 +110,4 @@
       background: $--color--border;
     }
   }
-}
-
-footer {
-  display: none;
 }

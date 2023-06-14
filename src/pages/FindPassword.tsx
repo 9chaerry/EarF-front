@@ -1,28 +1,59 @@
 import styles from './FindPassword.module.scss';
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { DefaultInput } from 'components/User/DefaultInput';
 import axios from 'axios';
+
+import FormHead from 'components/User/FormHead';
+import FormButton from 'components/User/FormButton';
+import { DefaultInput } from 'components/User/DefaultInput';
+import { validateField } from 'components/User/validation';
+
 // import { FindPassword } from 'components/common/Fetcher';
 import JoginIllust from '../assets/images/JoinIllust.jpg';
 
+interface FormData {
+  email: string;
+}
+
 function FindPassword() {
-  const [email, setEmail] = useState('');
-  const [emailWarning, setEmailWarning] = useState('');
+  const [formData, setFormData] = useState<FormData>({
+    email: '',
+  });
 
-  const handleSendEmail = async (e: React.FormEvent) => {
+  const [validation, setValidation] = useState<{ [key: string]: boolean }>({
+    email: false,
+  });
+
+  const [formValid, setFormValid] = useState(false);
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [id]: value,
+    }));
+  };
+
+  useEffect(() => {
+    const newValidation = {
+      email: validateField('email', formData.email, formData),
+    };
+
+    setValidation(newValidation);
+  }, [formData]);
+
+  useEffect(() => {
+    const isFormValid = Object.values(validation).every((isValid) => isValid);
+    setFormValid(isFormValid);
+  }, [validation]);
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
-    if (!validateEmail(email) || email === '') {
-      setEmailWarning('유효한 이메일을 입력해주세요.');
-      return;
-    }
-
-    setEmailWarning('');
 
     try {
       const response = await axios.post('http://34.64.216.86/api/user/reset', {
-        email: email,
+        email: formData.email,
       });
 
       alert(response.data);
@@ -37,17 +68,7 @@ function FindPassword() {
       console.log(`이메일 발송 중 오류가 발생했습니다. ${error}`);
     }
 
-    console.log('Send email to:', email);
-  };
-
-  const validateEmail = (email: string) => {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailPattern.test(email);
-  };
-
-  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-    setEmailWarning('');
+    console.log('Send email to:', formData.email);
   };
 
   return (
@@ -57,32 +78,28 @@ function FindPassword() {
           <img src={JoginIllust} alt='아이디찾기 일러스트' />
         </div>
         <div className={styles.form}>
-          <form onSubmit={handleSendEmail}>
+          <form onSubmit={handleSubmit}>
             <fieldset>
               <legend>비밀번호 찾기</legend>
-              <div className={styles.logo}>
-                <span>EarF</span>
+              <FormHead heading={'비밀번호 찾기'} description={'이메일 입력시, 임시비밀번호가 발송됩니다.'} />
+              <div>
+                <DefaultInput
+                  label='이메일'
+                  type='text'
+                  id='email'
+                  value={formData.email}
+                  error={!validation.email && formData.email.length > 0}
+                  errorMessage='유효한 이메일 주소를 입력해주세요.'
+                  onChange={handleInputChange}
+                />
               </div>
-              <div className={styles.title}>
-                <h2>비밀번호 찾기</h2>
-                <p>이메일 입력시, 임시비밀번호가 발송됩니다.</p>
-              </div>
-              <DefaultInput
-                inputProps={{
-                  type: 'email',
-                  id: 'email',
-                  value: email,
-                  onChange: handleEmailChange,
-                }}
-                label='이메일'
-                showWarning={true}
-                warning={emailWarning}
-              />
             </fieldset>
-            <div className={styles.buttonBox}>
+            <FormButton>
               <Link to='/login'>로그인</Link>
-              <button type='submit'>비밀번호 발송</button>
-            </div>
+              <button type='submit' disabled={!formValid}>
+                비밀번호 발송
+              </button>
+            </FormButton>
           </form>
         </div>
       </div>

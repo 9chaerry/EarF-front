@@ -1,65 +1,86 @@
 import styles from './Login.module.scss';
-import { useState } from 'react';
+import React, { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { saveToken, saveRefreshToken, accessTokenTime } from 'api/token';
 import axios from 'axios';
-import { DefaultInput } from 'components/User/DefaultInput';
-import { SaveToken, SaveRefreshToken } from 'components/common/token';
-// import { userLogin } from 'components/common/Fetcher';
 
+import FormHead from 'components/User/FormHead';
+import FormButton from 'components/User/FormButton';
+import { DefaultInput } from 'components/User/DefaultInput';
+import { validateField } from 'components/User/validation';
 import LoginIllust from '../assets/images/LoginIllust.jpg';
 
-function Login() {
+interface FormData {
+  id: string;
+  password: string;
+}
+
+const Login: React.FC = () => {
   const navigate = useNavigate();
-  const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
-  const [idWarning, setIdWarning] = useState('');
-  const [passwordWarning, setPasswordWarning] = useState('');
+  const [formData, setFormData] = useState<FormData>({
+    id: '',
+    password: '',
+  });
 
-  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setId(event.target.value);
+  const [validation, setValidation] = useState<{ [key: string]: boolean }>({
+    id: false,
+    password: false,
+  });
+
+  const [formValid, setFormValid] = useState(false);
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [id]: value,
+    }));
   };
 
-  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
-  };
+  useEffect(() => {
+    const newValidation = {
+      id: validateField('id', formData.id, formData),
+      password: validateField('password', formData.password, formData),
+    };
 
-  const handleLogin = async (e: React.FormEvent) => {
+    setValidation(newValidation);
+  }, [formData]);
+
+  useEffect(() => {
+    const isFormValid = Object.values(validation).every((isValid) => isValid);
+    setFormValid(isFormValid);
+  }, [validation]);
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (id === '') {
-      setIdWarning('아이디를 입력해주세요');
-    }
-    if (password === '') {
-      setPasswordWarning('비밀번호를 입력해주세요');
-    }
-    console.log(id, password);
-
     try {
-      if (id !== '' && password !== '') {
-        const userData = {
-          id: id,
-          password: password,
-        };
-        const response = await axios.post('http://34.64.216.86/api/auth', userData);
+      const userData = {
+        id: formData.id,
+        password: formData.password,
+      };
+      const response = await axios.post('http://34.64.216.86/api/auth', userData);
 
-        console.log('로그인에 성공했습니다:', response.data);
+      console.log('로그인에 성공했습니다:', response.data);
+      alert('로그인에 성공했습니다!');
 
-        const { accessToken, refreshToken } = response.data;
-        SaveToken(accessToken);
-        SaveRefreshToken(refreshToken);
+      const { accessToken, refreshToken } = response.data;
+      saveToken(accessToken);
+      saveRefreshToken(refreshToken);
+      accessTokenTime();
 
-        navigate('/calendar');
+      navigate('/calender');
 
-        /*
-        //Fetcher 사용
-        const data: any = await userLogin(id, password);
-        console.log('로그인에 성공했습니다:', data);
+      /*
+          //Fetcher 사용
+          const data: any = await userLogin(id, password);
+          console.log('로그인에 성공했습니다:', data);
 
-        const { accessToken, refreshToken } = data;
-        SaveToken(accessToken);
-        SaveRefreshToken(refreshToken);
-        */
-      }
+          const { accessToken, refreshToken } = data;
+          SaveToken(accessToken);
+          SaveRefreshToken(refreshToken);
+          */
     } catch (error) {
       console.error('로그인 요청 중 오류 발생:', error);
     }
@@ -72,45 +93,35 @@ function Login() {
           <img src={LoginIllust} alt='' />
         </div>
         <div className={styles.form}>
-          <form>
+          <form onSubmit={handleSubmit}>
             <fieldset>
               <legend>로그인</legend>
-              <div className={styles.logo}>
-                <span>EarF</span>
-              </div>
-              <div className={styles.title}>
-                <h2>로그인</h2>
-                <p>실천하고, 기록하고, 공유해보세요!</p>
-              </div>
+              <FormHead heading={'로그인'} description={'실천하고, 기록하고, 공유해보세요!'} />
               <div>
                 <DefaultInput
-                  inputProps={{
-                    type: 'text',
-                    id: 'id',
-                    value: id,
-                    onChange: handleUsernameChange,
-                  }}
                   label='아이디'
-                  showWarning={idWarning !== ''}
-                  warning={idWarning}
+                  type='text'
+                  id='id'
+                  value={formData.id}
+                  error={!validation.id && formData.id.length > 0}
+                  errorMessage='아이디는 영어와 숫자의 조합으로 8자 이상이어야 합니다.'
+                  onChange={handleInputChange}
                 />
                 <DefaultInput
-                  inputProps={{
-                    type: 'password',
-                    id: 'password',
-                    value: password,
-                    onChange: handlePasswordChange,
-                  }}
                   label='비밀번호'
-                  showWarning={passwordWarning !== ''}
-                  warning={passwordWarning}
+                  type='password'
+                  id='password'
+                  value={formData.password}
+                  error={!validation.password && formData.password.length > 0}
+                  errorMessage='비밀번호는 8자 이상이어야 합니다.'
+                  onChange={handleInputChange}
                 />
               </div>
-              <div className={styles.buttonBox}>
-                <button type='submit' onClick={handleLogin}>
+              <FormButton>
+                <button type='submit' disabled={!formValid}>
                   로그인
                 </button>
-              </div>
+              </FormButton>
               <div className={styles.linkBox}>
                 <Link to='/find_id'>아이디 찾기</Link>
                 <Link to='/find_password'>비밀번호 찾기</Link>
@@ -118,15 +129,15 @@ function Login() {
               <div className={styles.border}>
                 <span>회원이 아니신가요?</span>
               </div>
-              <div className={styles.buttonBox}>
+              <FormButton>
                 <Link to='/join'>회원가입</Link>
-              </div>
+              </FormButton>
             </fieldset>
           </form>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Login;

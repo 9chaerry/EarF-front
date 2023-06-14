@@ -86,24 +86,3 @@
     }
   }
 }
-
-.buttonBox {
-  display: flex;
-  justify-content: center;
-  padding: 20px 0 0;
-  width: 100%;
-
-  button {
-    display: block;
-    flex: 1 1;
-    padding: 0 16px;
-    height: 48px;
-    background: #24ae63;
-    border: 1px solid #24ae63;
-    border-radius: 6px;
-    font-size: 1.6rem;
-    font-weight: 500;
-    color: $--color--white;
-    transition: background 0.3s ease-in-out;
-  }
-}

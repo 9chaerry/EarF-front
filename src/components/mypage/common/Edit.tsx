@@ -1,27 +1,47 @@
 import styles from './Edit.module.scss';
-import { useState, ChangeEvent } from 'react';
-import { ReactComponent as UserIcon } from 'assets/icons/UserIcon.svg';
+import { useState, ChangeEvent, useEffect } from 'react';
 import Button from 'components/common/Button';
 import camera from 'assets/images/camera.png';
 import { useNavigate } from 'react-router-dom';
-// import { userInfoChange } from 'api/Fetcher';
-
+import { userInfo, userInfoChange, userImgChange } from 'api/fetcher';
+import defaultProfile from 'assets/icons/UserIcon.svg';
 interface FormValues {
+  id: string;
   name: string;
   email: string;
   phoneNumber: string;
-  profileImage: File | null;
+  profileImage?: File | null | string;
 }
 
 function Edit() {
   const navigate = useNavigate();
-  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const imgFormData = new FormData();
   const [formData, setFormData] = useState<FormValues>({
-    name: '불러온 이름',
-    email: 'abc@def.com',
-    phoneNumber: '010-1234-5678',
+    id: '',
+    name: '',
+    email: '',
+    phoneNumber: '',
     profileImage: null,
   });
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const { id, name, email, phoneNumber, profileImage }: FormValues = (await userInfo()) as FormValues;
+        const userData = {
+          id,
+          name,
+          email,
+          phoneNumber,
+          profileImage,
+        };
+        setFormData(userData);
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+      }
+    };
+    fetchUserInfo();
+  }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -34,23 +54,36 @@ function Edit() {
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setProfileImage(file);
+      console.log(file);
       setFormData((prevData) => ({
         ...prevData,
         profileImage: file,
       }));
+      imgFormData.append('profileImage', formData.profileImage as File);
     }
   };
 
-  const useNavigateToInfo = () => {
-    navigate('/mypage/info');
+  const useNavigateToChangePassword = () => {
+    navigate('/change_password');
+  };
+
+  const handleUserInfoChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    try {
+      const { id, name, email, phoneNumber } = formData;
+      await userInfoChange(id, name, email, phoneNumber);
+      await userImgChange(imgFormData);
+      navigate('/mypage/info');
+    } catch (error) {
+      console.error('수정에 실패했습니다.', error);
+    }
   };
 
   return (
     <div className={styles.edit}>
       <form>
         <div className={styles.profileImageBox}>
-          <UserIcon />
+          <img src={formData.profileImage ? formData.profileImage : `${defaultProfile}`} alt='프로필' />
           <label htmlFor='profileImage' className={styles.camera}>
             <img src={camera} alt='카메라'></img>
           </label>
@@ -64,8 +97,8 @@ function Edit() {
           />
         </div>
         <div className={styles.userInfo}>
-          <label htmlFor='name'>아이디</label>
-          <input type='text' id='name' name='name' value={formData.name} />
+          <label htmlFor='id'>아이디</label>
+          <input type='text' id='id' name='id' value={formData.id} readOnly />
         </div>
         <div className={styles.userInfo}>
           <label htmlFor='name'>이름</label>
@@ -80,9 +113,8 @@ function Edit() {
           <input type='tel' id='phoneNumber' name='phoneNumber' value={formData.phoneNumber} onChange={handleChange} />
         </div>
         <div className={styles.buttonContainer}>
-          <Button text={'완료'} />
-          {/* onClick={handleSubmit} */}
-          <Button text={'취소'} className={'whiteButton'} onClick={useNavigateToInfo} />
+          <Button text={'완료'} onClick={handleUserInfoChange} />
+          <Button text={'비밀번호 변경하기'} className={'whiteButton'} onClick={useNavigateToChangePassword} />
         </div>
       </form>
     </div>

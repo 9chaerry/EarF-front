@@ -36,41 +36,6 @@
 .form {
   flex: 1;
 
-  .logo {
-    span {
-      display: block;
-      padding: 0 0 10px;
-      font-size: 2rem;
-      font-family: 'Montserrat Alternates';
-      font-style: italic;
-      font-weight: 900;
-      color: #24ae63;
-    }
-  }
-
-  .title {
-    padding: 0 0 30px;
-
-    h2 {
-      font-size: 3rem;
-      font-weight: 700;
-      color: $--color--text1;
-    }
-
-    p {
-      display: block;
-      padding: 8px 0 0;
-      font-size: 1.4rem;
-      color: $--color--text2;
-      opacity: 0.8;
-
-      a {
-        color: rgb(57, 122, 246);
-        text-decoration: underline;
-      }
-    }
-  }
-
   form {
     fieldset {
       margin: 0;
@@ -87,27 +52,28 @@
   }
 }
 
-.buttonBox {
-  display: flex;
-  justify-content: center;
-  padding: 20px 0 0;
-  width: 100%;
+.formElement {
+  padding: 0 0 5px;
 
-  button {
-    display: block;
-    flex: 1 1;
-    padding: 0 16px;
-    height: 48px;
-    background: #24ae63;
-    border: 1px solid #24ae63;
+  label {
+    font-size: 1.3rem;
+    color: $--color--text2;
+  }
+
+  input {
+    flex: 1;
+    padding: 0 10px;
+    width: 100%;
+    min-width: 300px;
+    height: 45px;
+    border: 1px solid $--color--border;
     border-radius: 6px;
-    font-size: 1.6rem;
-    font-weight: 500;
-    color: $--color--white;
-    transition: background 0.3s ease-in-out;
+  }
 
-    &:hover {
-      background: #14703e;
-    }
+  .error {
+    display: block;
+    padding: 5px 0;
+    font-size: 1.3rem;
+    color: $--color--pink;
   }
 }

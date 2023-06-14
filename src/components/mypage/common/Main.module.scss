@@ -32,8 +32,11 @@
     width: 10rem;
     height: 10rem;
 
-    background: #24ae63;
     border-radius: 50%;
+
+    & > img {
+      border-radius: 50%;
+    }
   }
 
   & > .userId {

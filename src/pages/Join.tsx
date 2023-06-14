@@ -1,18 +1,22 @@
 import styles from './Join.module.scss';
-import React, { useState, ChangeEvent, FormEvent } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect, FormEvent, ChangeEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+
+import FormHead from 'components/User/FormHead';
+import FormButton from 'components/User/FormButton';
 import { DefaultInput } from 'components/User/DefaultInput';
-// import { userJoin } from 'components/common/Fetcher';
+import { validateField } from 'components/User/validation';
+
 import JoginIllust from '../assets/images/JoinIllust.jpg';
 
 interface FormData {
   id: string;
   password: string;
-  confirmPassword: string;
+  passwordConfirm: string;
+  name: string;
   email: string;
   phone: string;
-  name: string;
 }
 
 const Join: React.FC = () => {
@@ -20,103 +24,71 @@ const Join: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
     id: '',
     password: '',
-    confirmPassword: '',
+    passwordConfirm: '',
+    name: '',
     email: '',
     phone: '',
-    name: '',
   });
 
-  const [warningMessages, setWarningMessages] = useState<Record<string, string>>({});
+  const [validation, setValidation] = useState<{ [key: string]: boolean }>({
+    id: false,
+    password: false,
+    passwordConfirm: false,
+    name: false,
+    email: false,
+    phone: false,
+  });
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const [formValid, setFormValid] = useState(false);
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
       [id]: value,
     }));
   };
 
-  const validateForm = (): { isValid: boolean; warnings: Record<string, string> } => {
-    let isValid = true;
-    const warnings: Record<string, string> = {};
+  useEffect(() => {
+    const newValidation = {
+      id: validateField('id', formData.id, formData),
+      password: validateField('password', formData.password, formData),
+      passwordConfirm: validateField('passwordConfirm', formData.passwordConfirm, formData),
+      name: validateField('name', formData.name, formData),
+      email: validateField('email', formData.email, formData),
+      phone: validateField('phone', formData.phone, formData),
+    };
 
-    // 아이디 유효성 검사
-    if (formData.id.length < 8 || !/^[a-zA-Z0-9]+$/.test(formData.id)) {
-      warnings.id = '아이디는 영어와 숫자의 조합으로 8자 이상이어야 합니다.';
-      isValid = false;
-    }
+    setValidation(newValidation);
+  }, [formData]);
 
-    // 비밀번호 유효성 검사
-    if (formData.password.length < 8) {
-      warnings.password = '비밀번호는 8자 이상이어야 합니다.';
-      isValid = false;
-    }
-
-    // 비밀번호 확인 유효성 검사
-    if (formData.password !== formData.confirmPassword) {
-      warnings.confirmPassword = '비밀번호와 비밀번호 확인 값이 일치해야 합니다.';
-      isValid = false;
-    }
-
-    // 이메일 유효성 검사
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!emailRegex.test(formData.email)) {
-      warnings.email = '유효한 이메일 주소를 입력해주세요.';
-      isValid = false;
-    }
-
-    // 전화번호 유효성 검사
-    const phoneRegex = /^\d{3}-\d{4}-\d{4}$/;
-    if (!phoneRegex.test(formData.phone)) {
-      warnings.phone = '유효한 전화번호를 입력해주세요. (예시: 010-1234-5678)';
-      isValid = false;
-    }
-
-    // 이름 유효성 검사
-    if (formData.name.length < 2) {
-      warnings.name = '이름은 2자 이상 입력해주세요.';
-      isValid = false;
-    }
-
-    return { isValid, warnings };
-  };
+  useEffect(() => {
+    const isFormValid = Object.values(validation).every((isValid) => isValid);
+    setFormValid(isFormValid);
+  }, [validation]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    const { isValid, warnings } = validateForm();
+    try {
+      const userData = {
+        id: formData.id,
+        password: formData.password,
+        name: formData.name,
+        email: formData.email,
+        phoneNumber: formData.phone,
+      };
 
-    if (isValid) {
-      try {
-        const userData = {
-          id: formData.id,
-          password: formData.password,
-          name: formData.name,
-          email: formData.email,
-          phoneNumber: formData.phone,
-        };
+      console.log(userData);
+      const response = await axios.post('http://34.64.216.86/api/user/register', userData);
 
-        const response = await axios.post('http://34.64.216.86/api/user/register', userData);
+      console.log('회원가입에 성공했습니다:', response.data);
+      alert('회원가입에 성공했습니다. 로그인 해주세요!');
 
-        console.log(userData);
-        console.log('회원 가입을 완료했습니다.', response.data);
-        alert(response.data.message);
-
-        navigate('/login');
-
-        /*
-        //Fetcher 사용
-        const data: any = await userLogin(formData.id, formData.password, formData.name, formData.email, formData.phone);
-        console.log('회원 가입을 완료했습니다.', data);
-        alert(data.message);
-
-        navigate('/login');
-        */
-      } catch (error) {
-        console.error('회원 가입 중 오류가 발생했습니다.', error);
-      }
-    } else {
-      setWarningMessages(warnings);
+      navigate('/login');
+    } catch (error) {
+      console.error('회원가입 요청 중 오류 발생:', error);
     }
   };
 
@@ -130,93 +102,74 @@ const Join: React.FC = () => {
           <form onSubmit={handleSubmit}>
             <fieldset>
               <legend>회원가입</legend>
-              <div className={styles.logo}>
-                <span>EarF</span>
-              </div>
-              <div className={styles.title}>
-                <h2>회원가입</h2>
-                <p>
-                  이미 계정이 있으신가요? <Link to='/login'>로그인</Link>
-                </p>
-              </div>
+              <FormHead heading={'회원가입'} description={'실천하고, 기록하고, 공유해보세요!'} showLoginLink={true} />
               <div>
                 <DefaultInput
-                  inputProps={{
-                    type: 'text',
-                    id: 'id',
-                    value: formData.id,
-                    onChange: handleChange,
-                  }}
                   label='아이디'
-                  showWarning={!!warningMessages.id}
-                  warning={warningMessages.id}
+                  type='text'
+                  id='id'
+                  value={formData.id}
+                  error={!validation.id && formData.id.length > 0}
+                  errorMessage='아이디는 영어와 숫자의 조합으로 8자 이상이어야 합니다.'
+                  onChange={handleInputChange}
                 />
-
                 <DefaultInput
-                  inputProps={{
-                    type: 'password',
-                    id: 'password',
-                    value: formData.password,
-                    onChange: handleChange,
-                  }}
                   label='비밀번호'
-                  showWarning={!!warningMessages.password}
-                  warning={warningMessages.password}
+                  type='password'
+                  id='password'
+                  value={formData.password}
+                  error={!validation.password && formData.password.length > 0}
+                  errorMessage='비밀번호는 8자 이상이어야 합니다.'
+                  onChange={handleInputChange}
                 />
 
                 <DefaultInput
-                  inputProps={{
-                    type: 'password',
-                    id: 'confirmPassword',
-                    value: formData.confirmPassword,
-                    onChange: handleChange,
-                  }}
                   label='비밀번호 확인'
-                  showWarning={!!warningMessages.confirmPassword}
-                  warning={warningMessages.confirmPassword}
+                  type='password'
+                  id='passwordConfirm'
+                  value={formData.passwordConfirm}
+                  error={!validation.passwordConfirm && formData.passwordConfirm.length > 0}
+                  errorMessage='비밀번호와 비밀번호 확인이 일치하지 않습니다.'
+                  onChange={handleInputChange}
                 />
 
                 <DefaultInput
-                  inputProps={{
-                    type: 'text',
-                    id: 'name',
-                    value: formData.name,
-                    onChange: handleChange,
-                  }}
                   label='이름'
-                  showWarning={!!warningMessages.name}
-                  warning={warningMessages.name}
+                  type='text'
+                  id='name'
+                  value={formData.name}
+                  error={!validation.name && formData.name.length > 0}
+                  errorMessage='이름은 2자 이상이어야 합니다.'
+                  onChange={handleInputChange}
                 />
 
                 <DefaultInput
-                  inputProps={{
-                    type: 'email',
-                    id: 'email',
-                    value: formData.email,
-                    onChange: handleChange,
-                  }}
                   label='이메일'
-                  showWarning={!!warningMessages.email}
-                  warning={warningMessages.email}
+                  type='text'
+                  id='email'
+                  value={formData.email}
+                  error={!validation.email && formData.email.length > 0}
+                  errorMessage='유효한 이메일 주소를 입력해주세요.'
+                  onChange={handleInputChange}
                 />
 
                 <DefaultInput
-                  inputProps={{
-                    type: 'text',
-                    id: 'phone',
-                    value: formData.phone,
-                    onChange: handleChange,
-                  }}
                   label='전화번호'
-                  showWarning={!!warningMessages.phone}
-                  warning={warningMessages.phone}
+                  type='text'
+                  id='phone'
+                  value={formData.phone}
+                  error={!validation.phone && formData.phone.length > 0}
+                  errorMessage='전화번호는 010-1234-5678 형식으로 입력해주세요.'
+                  onChange={handleInputChange}
                 />
               </div>
             </fieldset>
 
-            <div className={styles.buttonBox}>
-              <button type='submit'>가입하기</button>
-            </div>
+            <FormButton>
+              <button type='submit' disabled={!formValid}>
+                가입하기
+              </button>
+            </FormButton>
           </form>
         </div>
       </div>

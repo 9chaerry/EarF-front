@@ -1,0 +1,47 @@
+@import 'color.scss';
+
+.buttonBox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 0 0;
+  width: 100%;
+
+  > a,
+  button {
+    display: block;
+    flex: 1 1;
+    padding: 0 16px;
+    height: 48px;
+    border-radius: 5px;
+    font-size: 1.6rem;
+    font-weight: 500;
+    line-height: 48px;
+    text-align: center;
+    transition: background 0.3s ease-in-out;
+
+    &:first-child {
+      background: $--color--white;
+      border: 1px solid $--color--primary;
+      color: $--color--primary;
+    }
+
+    &:last-child {
+      background: $--color--primary;
+      border: 1px solid $--color--primary;
+      color: #ffffff;
+
+      &:hover {
+        background: #14703e;
+      }
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      &:hover {
+        background: $--color--primary;
+      }
+    }
+  }
+}
