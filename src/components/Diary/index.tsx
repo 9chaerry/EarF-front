@@ -94,6 +94,7 @@ export default function Diary() {
               placeholder='행동 한마디'
               className={styles.inputContent}
               maxLength={20}
+              spellCheck={false}
               onChange={(event) => {
                 if (event.target.value.length <= 20) {
                   HandleEachValue('title', event.target.value, setFormData);

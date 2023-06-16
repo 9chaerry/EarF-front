@@ -99,6 +99,7 @@ export default function EditedDiary(props: {
             <input
               placeholder='행동 한마디'
               className={styles.inputContent}
+              spellCheck={false}
               onChange={(event) => {
                 HandleEachValue('title', event.target.value, setFormData);
               }}
@@ -108,6 +109,7 @@ export default function EditedDiary(props: {
               placeholder='오늘 어떤 행동을 했나요 ?'
               className={styles.inputContent}
               rows={5}
+              spellCheck={false}
               onChange={(event) => {
                 HandleEachValue('content', event.target.value, setFormData);
               }}
