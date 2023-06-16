@@ -143,6 +143,7 @@
     padding-left: 12rem;
     text-align: center;
     line-height: 1.1;
+    word-break: keep-all;
     & > h2 {
       font-size: 24pt;
       color: $--color--text1;
