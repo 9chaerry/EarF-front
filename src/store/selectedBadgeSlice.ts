@@ -1,13 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { userInfo } from 'api/fetcher';
+import { getToken } from 'api/token';
+import { User } from 'types/types';
+
+async function isLoggedIn(): Promise<string> {
+  const userData: User = (await userInfo()) as User;
+  const defaultBadge = userData.checkedBadge;
+  return defaultBadge;
+}
 
 interface SelectedBadgeState {
-  badge: string;
-  name: string;
+  badge: string | Promise<string>;
 }
 
 const initialState: SelectedBadgeState = {
-  badge: '신규',
-  name: '신규유저',
+  badge: getToken() ? '신규' : isLoggedIn(),
 };
 
 const selectedBadgeSlice = createSlice({
