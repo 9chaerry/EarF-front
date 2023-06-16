@@ -16,7 +16,7 @@
 
 ## 1. 서비스 링크
 
-### http://kdt-sw-4-team09.elicecoding.com/
+- ### http://kdt-sw-4-team09.elicecoding.com/
 
 
 <br />
@@ -25,7 +25,19 @@
 
 <br />
 
-### 2-1. api 명세서
+### 2-1. API 문서
+
+### User, Auth
+
+- ### https://documenter.getpostman.com/view/19463141/Uz5JHvXh
+
+### Diary
+
+- ### https://documenter.getpostman.com/view/26747226/2s93shy9AD
+
+### Question
+
+- ### https://documenter.getpostman.com/view/20811195/2s93shyUQx
 
 
 
