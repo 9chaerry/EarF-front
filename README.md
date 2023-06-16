@@ -1,5 +1,4 @@
 
-
 <!-- logo -->
 
 <div align="center">
@@ -19,6 +18,16 @@
 ## 1. 서비스 링크
 
 ### http://kdt-sw-4-team09.elicecoding.com/
+
+
+<br />
+
+## 2. 소개
+
+<br />
+
+### 2-1. api 명세서
+
 
 
 
@@ -90,12 +99,13 @@
 
 ## 5. Tech Stack
 
-| **Dev-Ops**  |                                                                                                                                                                                                                                                                          <img src="https://img.shields.io/badge/NGINX-009639?style=for-the-badge&logo=NGINX&logoColor=black">                                                                                                                                                                                                                                                                           |
+|**Tech-Stack**|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | ------------ | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | **Frontend** | <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=TypeScript&logoColor=black"> <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB"> <img src="https://img.shields.io/badge/Redux_Toolkit-764ABC?style=for-the-badge&logo=Redux&logoColor=black"> <img src="https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=sass&logoColor=white"> <img src="https://img.shields.io/badge/eslint-3A33D1?style=for-the-badge&logo=eslint&logoColor=white"> <img src="https://img.shields.io/badge/prettier-1A2C34?style=for-the-badge&logo=prettier&logoColor=F7BA3E"> |
 | **Backend**  |                                                                                                                                                                                                                   <img src="https://img.shields.io/badge/nodejs-339933?style=for-the-badge&logo=nodedotjs&logoColor=white"> <img src="https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white">                                                                                                                                                                                                                    |
 | **DB**       |                                                                                                                                                                                                                                                                        <img src="https://img.shields.io/badge/mongodb-47A248?style=for-the-badge&logo=mongodb&logoColor=white">                                                                                                                                                                                                                                                                         |
 | **Others**   |                                                                                                               <img src="https://img.shields.io/badge/GitLab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white"> <img src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white"><img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white"> <img src="https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white">                                                                                                                |
+| **Dev-Ops**       |                                                                                                                                                                                                                                                                         <img src="https://img.shields.io/badge/NGINX-009639?style=for-the-badge&logo=NGINX&logoColor=black">                                                                                                                                                                                                                                                                              |
 
 <br>
 
