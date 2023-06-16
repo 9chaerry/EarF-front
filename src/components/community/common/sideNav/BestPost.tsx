@@ -1,7 +1,16 @@
 import UserReaction from '../UserReaction';
 import styles from './BestPost.module.scss';
 import { Link } from 'react-router-dom';
+import { userInfo } from 'api/fetcher';
+import { User } from 'types/types';
 
+async function isLoggedIn(): Promise<string> {
+  const userData: User = (await userInfo()) as User;
+  const defaultBadge = userData.checkedBadge;
+  console.log(defaultBadge);
+  return defaultBadge;
+}
+isLoggedIn();
 interface BestLikesDataProps {
   _id: string;
   title: string;
