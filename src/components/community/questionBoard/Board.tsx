@@ -100,7 +100,11 @@ function Board() {
   let sortedData = searchData || postData;
   let isLoading = isSearchLoading || isPostLoading;
   let error = postError;
-
+  if (activeSorting === 'recent') {
+    sortedData = postData;
+    isLoading = isPostLoading;
+    error = postError;
+  }
   if (activeSorting === 'comments') {
     sortedData = mostCommentsData;
     isLoading = isMostCommentsLoading;

@@ -46,8 +46,6 @@ function Header(): JSX.Element {
             const { name, profileImage } = response.data;
             setUserName(name);
             setProfileImage(profileImage);
-
-            console.log(name, profileImage);
           } catch (error) {
             console.error('Failed to fetch user information:', error);
           }

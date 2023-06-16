@@ -9,7 +9,7 @@ const initialState: SelectedBadgeState = {
 };
 
 const selectedBadgeSlice = createSlice({
-  name: 'SelectedBadge',
+  name: 'selectedBadge',
   initialState,
   reducers: {
     setSelectedBadge: (state, action) => {

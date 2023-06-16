@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './Badge.module.scss';
 import BadgeModal from './BadgeModal';
 import BadgeList from './BadgeList';

@@ -8,7 +8,6 @@ import getBadgeImagePath from 'utils/getBadgeImagePath';
 
 function MyProfile() {
   const selectedBadge = useSelector((state: RootState) => state.selectedBadge);
-  console.log(selectedBadge.badge);
   const { data: userInfo } = useGetUserInfoQuery();
   const { data: postInfo } = useGetMyQuestionQuery();
 
