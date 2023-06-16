@@ -34,7 +34,6 @@ function Board() {
   }, [allPostData]);
 
   const { data: searchData, isLoading: isSearchLoading } = useGetSearchQuery(searchQuery);
-
   const { data: postData, isLoading: isPostLoading, error: postError } = useGetCommunityPostsQuery(page);
   const {
     data: mostCommentsData,
@@ -59,16 +58,19 @@ function Board() {
   const handleSubmitSearch: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     setSearchQuery(search);
+    searchData && setTotalItemsCount(searchData.length);
   };
   const pressEnterSearch: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       setSearchQuery(search);
+      searchData && setTotalItemsCount(searchData.length);
     }
   };
   const handleClickSearch: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
     setSearchQuery(search);
+    searchData && setTotalItemsCount(searchData.length);
   };
 
   // 작성하기 버튼 페이지 이동
@@ -95,14 +97,21 @@ function Board() {
 
   // 정렬 기준 변경 이벤트
   const handleSortingClick = (sorting: string) => {
+    allPostData && setTotalItemsCount(allPostData.length);
+    if (sorting === 'recent') {
+      setSearchQuery('');
+      setActiveSorting(sorting);
+    }
     setActiveSorting(sorting);
   };
+
   let sortedData = searchData || postData;
   let isLoading = isSearchLoading || isPostLoading;
   let error = postError;
+
   if (activeSorting === 'recent') {
-    sortedData = postData;
-    isLoading = isPostLoading;
+    sortedData = searchData || postData;
+    isLoading = isSearchLoading || isPostLoading;
     error = postError;
   }
   if (activeSorting === 'comments') {
