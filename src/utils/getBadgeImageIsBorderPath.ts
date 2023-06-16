@@ -6,7 +6,7 @@ import badgePublicTrans from 'assets/images/badge05.png';
 import badgeBasket from 'assets/images/badge06.png';
 import badgeCommunity from 'assets/images/badge07.png';
 
-export default function getBadgeImagePath(checkedBadge: string) {
+export default function getBadgeImagePath(checkedBadge: string | Promise<string>) {
   switch (checkedBadge) {
     case '신규':
       return badgeDefault;
