@@ -14,11 +14,11 @@ import {
 import { getToken, isTokenExpired, refreshAccessToken } from './token';
 
 // 코치님이 말하신 방법으로 사용을 했는데 403 에러가 반환되어서 오류를 잡고있습니다..ㅠㅠ
-const addHeaders = () => {
+const addHeaders = async () => {
   let token = getToken();
 
   if (isTokenExpired()) {
-    refreshAccessToken();
+    await refreshAccessToken();
     token = `${getToken()}`;
   }
 
