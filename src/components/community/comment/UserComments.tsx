@@ -113,6 +113,7 @@ function UserComments() {
               rows={1}
               placeholder='댓글을 입력해주세요.'
               className={styles.content}
+              spellCheck='false'
               value={comment}
               onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
                 autoResizeHeight();
