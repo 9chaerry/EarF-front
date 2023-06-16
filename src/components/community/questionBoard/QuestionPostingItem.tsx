@@ -26,7 +26,7 @@ function QuestionPostingItem({
   if (content.split('.').length <= 4 && content.length >= 100) {
     contentText = `${content.substring(0, 100)}`;
   } else {
-    contentText = `${content.split('.').slice(0, 5).join('.')}`;
+    contentText = `${content.split('.').slice(0, 5).join('.')}  ...  더보기`;
   }
 
   return (
