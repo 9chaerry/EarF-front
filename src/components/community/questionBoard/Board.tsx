@@ -93,6 +93,9 @@ function Board() {
   // 페이지네이션
   const movePage = (page: number) => {
     setPage(page);
+
+    console.log(page);
+    console.log(sortedData);
   };
 
   // 정렬 기준 변경 이벤트

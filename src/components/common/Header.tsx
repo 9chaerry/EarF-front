@@ -28,6 +28,7 @@ function Header(): JSX.Element {
     navigate('/login');
     dispatch(logout());
     alert('다음에 또 만나요! :D');
+    window.location.reload();
   };
 
   useEffect(() => {

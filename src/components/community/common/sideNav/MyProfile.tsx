@@ -7,7 +7,6 @@ import { useGetUserInfoQuery, useGetMyQuestionQuery } from 'api/communityApiSlic
 import getBadgeImagePath from 'utils/getBadgeImagePath';
 
 function MyProfile() {
-  const selectedBadge = useSelector((state: RootState) => state.selectedBadge);
   const { data: userInfo } = useGetUserInfoQuery();
   const { data: postInfo } = useGetMyQuestionQuery();
   const myBadge = localStorage.getItem('badge');
@@ -17,12 +16,12 @@ function MyProfile() {
       <MyProfileImg />
       <div className={styles.userInfo}>
         <div className={styles.userName}>
-          {!userInfo ? (
+          {userInfo && !undefined ? (
+            <span>{userInfo.name}</span>
+          ) : (
             <Link to='/login'>
               <span className={styles.notLoggedIn}>로그인</span>
             </Link>
-          ) : (
-            <span>{userInfo.name}</span>
           )}
           {userInfo && myBadge && <img src={getBadgeImagePath(myBadge)} className={styles.userBadge} alt='Badge' />}
         </div>
