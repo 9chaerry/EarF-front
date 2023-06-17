@@ -93,9 +93,6 @@ function Board() {
   // 페이지네이션
   const movePage = (page: number) => {
     setPage(page);
-
-    console.log(page);
-    console.log(sortedData);
   };
 
   // 정렬 기준 변경 이벤트
@@ -108,16 +105,15 @@ function Board() {
     setActiveSorting(sorting);
   };
 
-  let sortedData = searchData || postData;
+  let sortedData = postData;
   let isLoading = isSearchLoading || isPostLoading;
   let error = postError;
 
-  if (activeSorting === 'recent') {
-    sortedData = searchData || postData;
+  if (activeSorting === 'recent' && !search) {
+    sortedData = postData;
     isLoading = isSearchLoading || isPostLoading;
     error = postError;
-  }
-  if (activeSorting === 'comments') {
+  } else if (activeSorting === 'comments') {
     sortedData = mostCommentsData;
     isLoading = isMostCommentsLoading;
     error = mostCommentsError;
@@ -125,6 +121,11 @@ function Board() {
     sortedData = mostLikesData;
     isLoading = isMostLikesLoading;
     error = mostLikesError;
+  } else if (searchQuery && searchData && searchData.length > 0) {
+    // 수정된 부분
+    sortedData = searchData;
+    isLoading = isSearchLoading;
+    error = postError;
   }
 
   return (
@@ -136,7 +137,11 @@ function Board() {
             className={styles.searchInput}
             placeholder='궁금한 질문을 검색해보세요!'
             onKeyPress={pressEnterSearch}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setSearch(e.target.value);
+            }}
           />
           <button type='submit' className={styles.searchButton} onClick={handleClickSearch}>
             <Chat />
@@ -160,6 +165,7 @@ function Board() {
           <ul>
             <li
               onClick={() => {
+                setSearch('');
                 handleSortingClick('recent');
                 setPage(1);
                 scrollToTop();
