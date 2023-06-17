@@ -72,7 +72,6 @@ const Login: React.FC = () => {
       const data: any = await userLogin(id, password);
 
       // const response = await axios.post('http://34.64.216.86/api/auth', userData);
-
       alert(data.message);
 
       const { accessToken, refreshToken } = data;

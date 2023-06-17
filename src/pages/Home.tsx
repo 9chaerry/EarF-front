@@ -2,7 +2,7 @@ import styles from './Home.module.scss';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'store';
-
+import { useGetUserInfoQuery } from 'api/communityApiSlice';
 import CommunitySwiper from 'components/home/CommunitySwiper';
 import MainSwiper from 'components/home/MainSwiper';
 
@@ -24,6 +24,9 @@ import Star from 'assets/icons/Star.svg';
 function Home() {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state: RootState) => state.login.isLoggedIn);
+
+  const { data: userInfo } = useGetUserInfoQuery();
+  userInfo && localStorage.setItem('badge', userInfo.checkedBadge);
 
   const smoothScrollToAnchor = (target: any) => {
     const targetElement = document.querySelector(target);

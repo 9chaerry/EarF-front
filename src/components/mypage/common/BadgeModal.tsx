@@ -43,6 +43,7 @@ function BadgeModal({ type, name, imgSrc, isGet, info, handleShowModal }: BadgeM
   const handleCheckedBadge = async () => {
     try {
       await checkedBadgeChange(type);
+      localStorage.setItem('badge', type);
       const badge = type;
       dispatch(setSelectedBadge({ badge }));
       handleShowModal();

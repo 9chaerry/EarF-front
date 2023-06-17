@@ -8,11 +8,9 @@ import styles from './UserComments.module.scss';
 import errorCommunity from 'assets/images/errorCommunity.png';
 import profileDefault from 'assets/images/profileDefault.png';
 import getBadgeImagePath from 'utils/getBadgeImagePath';
-import { useSelector } from 'react-redux';
-import { RootState } from 'store';
 
 function UserComments() {
-  const selectedBadge = useSelector((state: RootState) => state.selectedBadge);
+  const myBadge = localStorage.getItem('badge');
   const [showAllComments, setShowAllComments] = useState(false);
   const [comment, setComment] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -105,7 +103,7 @@ function UserComments() {
             ) : (
               <img src={profileDefault} className={styles.userProfile} />
             )}
-            {userInfo && <img src={getBadgeImagePath(selectedBadge.badge)} className={styles.userBadge} alt='Badge' />}
+            {userInfo && myBadge && <img src={getBadgeImagePath(myBadge)} className={styles.userBadge} alt='Badge' />}
           </div>
           {!token ? (
             <textarea rows={1} placeholder='로그인 후 댓글 작성이 가능합니다.' className={styles.content} disabled />
