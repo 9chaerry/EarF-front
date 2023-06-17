@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import MyProfile from './sideNav/MyProfile';
 import styles from './LeftSideNav.module.scss';
 
@@ -19,17 +19,14 @@ function LeftSideNav() {
           <ul>
             {navLinks.map(({ to, label, image }) => (
               <li key={label}>
-                <NavLink
-                  to={to}
-                  className={({ isActive, isPending }) => (isPending ? styles.inactive : isActive ? styles.active : '')}
-                >
+                <Link to={to} className={styles.link + (window.location.pathname === to ? ' ' + styles.active : '')}>
                   <div>
                     <div className={styles.icon}>
                       <img src={image} alt='' />
                     </div>
                     <span>{label}</span>
                   </div>
-                </NavLink>
+                </Link>
               </li>
             ))}
           </ul>
