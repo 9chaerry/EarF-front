@@ -14,11 +14,12 @@
   }
 
   .swiperSlide {
-    padding: 20px;
+    padding: 10px;
     width: 100%;
     border: 1px solid #eeeeee;
     border-radius: 1rem;
     box-shadow: rgba(112, 112, 112, 0.2) 0px 2px 15px 0px;
+    overflow: hidden;
   }
 
   .board {
